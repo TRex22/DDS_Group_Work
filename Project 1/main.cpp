@@ -117,7 +117,7 @@ void Test_Convert(){
     printf("Testing Convert......................................\n");
     int a;
     // 5*(3+1) = 20
-    assert(convert("5*(3+1)"), "531+*", "convert - 5321+*");
+    assert(convert("5*(3+1)"), "531+*", "convert - 531+*");
     // 5 * 3 + 1 = 16
     assert(convert("5*3+1"), "53*1+", "convert - 53*1+");
     // (9/3) - (1+1) = 1
