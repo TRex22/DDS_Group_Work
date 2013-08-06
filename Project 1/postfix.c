@@ -136,10 +136,7 @@ char* convert(char* in){
   	//if it is a number then
   	char c=in[i];
 	//int ascii=(int)in[i];
-  	//if(c==NULL)	
-	  //{
-	  	//break;
-	  //}
+  	
   	//if(ascii>=48 && ascii<=57)
   	if(in[i]-'0' >= 0 && in[i]-'0' <=9)
 	{
@@ -154,17 +151,17 @@ char* convert(char* in){
 		stack_c_push(s, c);
 	}
   	//   else if it is an opperator then
-  	else if(c=='/'|c=='*'|c=='+'|c=='-'|c=='^')
+  	else if(c=='/'|c=='*'|c=='+'|c=='-')//|c=='^')
 	{
-	  	//if the stack is empty then
+	  	//      if the stack is empty then
 	  	//if(s->size==-1)
-	  	if(s->size<0)
+	  	if(s->size==-1)
 		{
 			//push it onto the stack
 			stack_c_push(s, c);
 		}
 	  	
-	  	//else
+	  	//   else
 	  	else
 		{
 			//while the top of the stack has higher precedence do
@@ -177,13 +174,13 @@ char* convert(char* in){
 			}
 			//push the token/char to the stack
 			stack_c_push(s, c);
-		}//end if
-	} 
+		}
+	} //end if
 	//else if it is right brace then
 	else if(c==')')
 	{
 	  	//while the stack is not empty and the top item isn't a left brace do
-	  	while(s->size>-1 && s->data[s->size]!='(')
+	  	while(s->size>-1 & s->data[s->size]!='(')
 		{
 			//pop from stack and append to output string
 			out[outSize]=stack_c_pop(s);
