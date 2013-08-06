@@ -63,12 +63,13 @@ int  stack_i_peek(IntStack* s){
 
 /*********************************************************/
 int calculate(char* p){
-	int num1, num2;
+	
 	int i;
 	IntStack *s=stack_i_init();
 	
 	for(i=0;i<DEFAULT_SIZE;i++)
 	{
+		int num1, num2;
 		if(p[i]>='0' && p[i]<='9')
 		{
 			s->size++;
@@ -76,13 +77,11 @@ int calculate(char* p){
 		}
 		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
 		{
-			num1=stack_i_pop(s);
-			num2=stack_i_pop(s);
-			
-			printf("\n%i %i", num1, num2);
-			
 			if(s->size>0)
 			{
+				num1=stack_i_pop(s);
+				num2=stack_i_pop(s);
+			
 				switch(p[i])
 				{
 					case '+':
@@ -98,6 +97,11 @@ int calculate(char* p){
 						stack_i_push(s, (num2/num1));
 						break;
 				}
+			}
+			else
+			{
+				return -2000;
+				break;
 			}			
 		}
 		else if(p[i]==NULL)
