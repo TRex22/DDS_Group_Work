@@ -188,7 +188,11 @@ char* convert(char* in){
 	  	}//end while
 	  	//finally pop out and disgard the left brace.
 	  	stack_c_pop(s);
-  	}//end if	
+  	}//end if
+	  else if(c==NULL)	
+	  {
+	  	break;
+	  }
   }//end for 
   
   //if there is any input in the stack, pop and append each item to the output string.
@@ -201,7 +205,7 @@ char* convert(char* in){
 	//return the output string.
 	//test:
 	//printf("\n\nTest:%s\n\n",out);
-	//system("Pause");
+	//system("PAUSE");
 	//out = "93/11+-";
 	return out; 	
 }
