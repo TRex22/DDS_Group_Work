@@ -123,59 +123,87 @@ int calculate(char* p){
 }
 
 char* convert(char* in){
-	CharStack *s=stack_c_init();
-	char* out=(char*)malloc(DEFAULT_SIZE*sizeof(char));
-	int outSize=0;
-	
-	int i;
-	for(i=0;i<DEFAULT_SIZE;i++)
+	//initialise a stack
+  //int DEFAULT = 10;
+  CharStack *s=stack_c_init();
+  char *out;
+  out = (char*)malloc(DEFAULT_SIZE*sizeof(char));
+  
+  int i, outSize = 0;
+  //for each char/token in the string do
+  for(i=0;i<DEFAULT_SIZE;i++)
+  {
+  	//if it is a number then
+  	char c=in[i];
+	//int ascii=(int)in[i];
+  	
+  	//if(ascii>=48 && ascii<=57)
+  	if(in[i]-'0' >= 0 && in[i]-'0' <=9)
 	{
-		char c=in[i];
-		int ascii=(int)in[i];
-		
-		if(ascii>=48 && ascii<=57)
+		//append to output string
+		out[outSize]=c;
+		outSize++;
+	}
+  	//   else if it is left brace then
+  	else if(c=='(')
+	{
+		//push it onto the stack
+		stack_c_push(s, c);
+	}
+  	//   else if it is an opperator then
+  	else if(c=='/'|c=='*'|c=='+'|c=='-')//|c=='^')
+	{
+	  	//      if the stack is empty then
+	  	//if(s->size==-1)
+	  	if(s->size==-1)
 		{
-			out[outSize]=c;
-			outSize++;
-		}
-		else if(c=='(')
-		{
+			//push it onto the stack
 			stack_c_push(s, c);
 		}
-		else if(c=='/'|c=='*'|c=='+'|c=='-'|c=='^')
+	  	
+	  	//   else
+	  	else
 		{
-			if(s->size==0)
+			//while the top of the stack has higher precedence do
+			while(s->size>-1)
 			{
-				stack_c_push(s, c);
-			}
-			else
-			{
-				while(s->size>-1)
-				{
-					out[outSize]=stack_c_pop(s);
-					outSize++;
-				}
-				stack_c_push(s, c);
-			}
-		}
-		else if(c==')')
-		{
-			while(s->size>-1 & s->data[s->size]!='(')
-			{
+				//pop and append to output string
+  				//end while
 				out[outSize]=stack_c_pop(s);
 				outSize++;
 			}
-			stack_c_pop(s);
+			//push the token/char to the stack
+			stack_c_push(s, c);
 		}
-	}
-	
-	while(s->size>-1)
+	} //end if
+	//else if it is right brace then
+	else if(c==')')
+	{
+	  	//while the stack is not empty and the top item isn't a left brace do
+	  	while(s->size>-1 & s->data[s->size]!='(')
+		{
+			//pop from stack and append to output string
+			out[outSize]=stack_c_pop(s);
+			outSize++;
+	  	}//end while
+	  	//finally pop out and disgard the left brace.
+	  	stack_c_pop(s);
+  	}//end if	
+  }//end for 
+  
+  //if there is any input in the stack, pop and append each item to the output string.
+  while(s->size>-1)
 	{
 		out[outSize]=stack_c_pop(s);
 		outSize++;
 	}
-	
-	return out;
+  
+	//return the output string.
+	//test:
+	//printf("\n\nTest:%s\n\n",out);
+	//system("Pause");
+	//out = "93/11+-";
+	return out; 	
 }
 
 
