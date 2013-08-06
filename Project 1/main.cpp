@@ -103,7 +103,7 @@ void Test_Calculate(){
     printf("Testing Calculate......................................\n");
     int a;
     // 5*(3+1) = 20
-    assert(calculate("531+*"), 20, "calculate, valid - 5321+*");
+    assert(calculate("531+*"), 20, "calculate, valid - 531+*");
     // 5 * 3 + 1 = 16
     assert(calculate("53*1+"), 16, "calculate, valid - 53*1+");
     // (9/3) - (1+1) = 1

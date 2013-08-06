@@ -12,19 +12,19 @@ MakeIncludes=
 Compiler=
 CppCompiler=
 Linker=
-IsCpp=0
+IsCpp=1
 Icon=
 ExeOutput=
 ObjectOutput=
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=main.exe
+OverrideOutputName=
 HostApplication=
 Folders=
 CommandLine=
-UseCustomMakefile=1
-CustomMakefile=makefile
+UseCustomMakefile=0
+CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=1
@@ -39,20 +39,20 @@ Build=0
 LanguageID=1033
 CharsetID=1252
 CompanyName=
-FileVersion=1.0.0.0
+FileVersion=
 FileDescription=Developed using the Dev-C++ IDE
 InternalName=
 LegalCopyright=
 LegalTrademarks=
 OriginalFilename=
 ProductName=
-ProductVersion=1.0.0.0
+ProductVersion=
 AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
 FileName=main.cpp
-CompileCpp=0
+CompileCpp=1
 Folder=main
 Compile=1
 Link=1
@@ -71,7 +71,7 @@ BuildCmd=
 
 [Unit3]
 FileName=postfix.c
-CompileCpp=0
+CompileCpp=1
 Folder=main
 Compile=1
 Link=1
@@ -81,7 +81,7 @@ BuildCmd=
 
 [Unit4]
 FileName=postfix.h
-CompileCpp=0
+CompileCpp=1
 Folder=main
 Compile=1
 Link=1

@@ -20,7 +20,10 @@ void stack_c_push(CharStack* s, char c){
 
 // Pop off the top of stack
 char stack_c_pop(CharStack* s){
-	s->size--;
+	if(s->size>-1)
+	{
+		s->size--;
+	}
 	return s->data[s->size+1];
 }
 
@@ -46,7 +49,10 @@ void stack_i_push(IntStack* s, int c){
 
 // Pop from the top of stack
 int  stack_i_pop(IntStack* s){
-	s->size--;
+	if(s->size>-1)
+	{
+		s->size--;
+	}
 	return s->data[s->size+1];
 }
 
@@ -57,7 +63,59 @@ int  stack_i_peek(IntStack* s){
 
 /*********************************************************/
 int calculate(char* p){
+	int num1, num2;
+	int i;
+	IntStack *s=stack_i_init();
 	
+	for(i=0;i<DEFAULT_SIZE;i++)
+	{
+		if(p[i]>='0' && p[i]<='9')
+		{
+			s->size++;
+			s->data[s->size]=p[i]-'0';
+		}
+		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
+		{
+			num1=stack_i_pop(s);
+			num2=stack_i_pop(s);
+			
+			printf("\n%i %i", num1, num2);
+			
+			if(s->size>0)
+			{
+				switch(p[i])
+				{
+					case '+':
+						stack_i_push(s, (num2+num1));
+						break;
+					case '-':
+						stack_i_push(s, (num2-num1));
+						break;
+					case'*':
+						stack_i_push(s, (num2*num1));
+						break;
+					case '/':
+						stack_i_push(s, (num2/num1));
+						break;
+				}
+			}			
+		}
+		else if(p[i]==NULL)
+		{
+			break;
+		}
+	}
+	
+	if(s->size>0)
+	{
+		return -1000;
+	}
+	else
+	{
+		int num=stack_i_pop(s);
+		free(s);
+		return num;
+	}
 }
 
 char* convert(char* in){
