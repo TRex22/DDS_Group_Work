@@ -187,7 +187,66 @@ char* convert(char* in){
 }
 
 
-int calculate_extra(char* in){
-
+int calculate_extra(char* p){
+	int i;
+	IntStack *s=stack_i_init();
+	
+	for(i=0;i<DEFAULT_SIZE;i++)
+	{
+		int num1, num2;
+		if (p[i]==' ')
+		{
+			
+		}
+		else if(p[i]>='0' && p[i]<='9')
+		{
+			s->size++;
+			s->data[s->size]=p[i]-'0';
+		}
+		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
+		{
+			if(s->size>0)
+			{
+				num1=stack_i_pop(s);
+				num2=stack_i_pop(s);
+			
+				switch(p[i])
+				{
+					case '+':
+						stack_i_push(s, (num2+num1));
+						break;
+					case '-':
+						stack_i_push(s, (num2-num1));
+						break;
+					case'*':
+						stack_i_push(s, (num2*num1));
+						break;
+					case '/':
+						stack_i_push(s, (num2/num1));
+						break;
+				}
+			}
+			else
+			{
+				return -2000;
+				break;
+			}			
+		}
+		else if(p[i]==NULL)
+		{
+			break;
+		}
+	}
+	
+	if(s->size>0)
+	{
+		return -1000;
+	}
+	else
+	{
+		int num=stack_i_pop(s);
+		free(s);
+		return num;
+	}
 }
 
