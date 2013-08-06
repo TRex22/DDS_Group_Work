@@ -23,8 +23,12 @@ char stack_c_pop(CharStack* s){
 	if(s->size>-1)
 	{
 		s->size--;
+		return s->data[s->size+1];
 	}
-	return s->data[s->size+1];
+	else
+	{
+		return NULL;
+	}
 }
 
 // Return the top of the stack without removing it
@@ -52,8 +56,12 @@ int  stack_i_pop(IntStack* s){
 	if(s->size>-1)
 	{
 		s->size--;
+		return s->data[s->size+1];
 	}
-	return s->data[s->size+1];
+	else
+	{
+		return NULL;
+	}
 }
 
 // Return the top of the stack without removing it
@@ -123,91 +131,59 @@ int calculate(char* p){
 }
 
 char* convert(char* in){
-	//initialise a stack
-  //int DEFAULT = 10;
-  CharStack *s=stack_c_init();
-  char *out;
-  out = (char*)malloc(DEFAULT_SIZE*sizeof(char));
-  
-  int i, outSize = 0;
-  //for each char/token in the string do
-  for(i=0;i<DEFAULT_SIZE;i++)
-  {
-  	//if it is a number then
-  	char c=in[i];
-	//int ascii=(int)in[i];
-  	
-  	//if(ascii>=48 && ascii<=57)
-  	if(in[i]-'0' >= 0 && in[i]-'0' <=9)
+	CharStack *s=stack_c_init();
+	char* out=(char*)malloc(DEFAULT_SIZE*sizeof(char));
+	int outSize=0;
+	
+	int i;
+	for(i=0;i<DEFAULT_SIZE;i++)
 	{
-		//append to output string
-		out[outSize]=c;
-		outSize++;
-	}
-  	//   else if it is left brace then
-  	else if(c=='(')
-	{
-		//push it onto the stack
-		stack_c_push(s, c);
-	}
-  	//   else if it is an opperator then
-  	else if(c=='/'|c=='*'|c=='+'|c=='-')//|c=='^')
-	{
-	  	//      if the stack is empty then
-	  	//if(s->size==-1)
-	  	if(s->size==-1)
+		char c=in[i];
+		int ascii=(int)in[i];
+		
+		if(ascii>=48 && ascii<=57)
 		{
-			//push it onto the stack
+			out[outSize]=c;
+			outSize++;
+		}
+		else if(c=='(')
+		{
 			stack_c_push(s, c);
 		}
-	  	
-	  	//   else
-	  	else
+		else if(c=='/'|c=='*'|c=='+'|c=='-')
 		{
-			//while the top of the stack has higher precedence do
-			while(s->size>-1)
+			if(s->size<0)
 			{
-				//pop and append to output string
-  				//end while
+				stack_c_push(s, c);
+			}
+			else
+			{
+				while(s->size>-1 && stack_c_peek(s)!='(')
+				{
+					out[outSize]=stack_c_pop(s);
+					outSize++;
+				}
+				stack_c_push(s, c);
+			}
+		}
+		else if(c==')')
+		{
+			while(s->size>-1 & s->data[s->size]!='(')
+			{
 				out[outSize]=stack_c_pop(s);
 				outSize++;
 			}
-			//push the token/char to the stack
-			stack_c_push(s, c);
+			stack_c_pop(s);
 		}
-	} //end if
-	//else if it is right brace then
-	else if(c==')')
-	{
-	  	//while the stack is not empty and the top item isn't a left brace do
-	  	while(s->size>-1 & s->data[s->size]!='(')
-		{
-			//pop from stack and append to output string
-			out[outSize]=stack_c_pop(s);
-			outSize++;
-	  	}//end while
-	  	//finally pop out and disgard the left brace.
-	  	stack_c_pop(s);
-  	}//end if
-	  else if(c==NULL)	
-	  {
-	  	break;
-	  }
-  }//end for 
-  
-  //if there is any input in the stack, pop and append each item to the output string.
-  while(s->size>-1)
+	}
+	
+	while(s->size>-1)
 	{
 		out[outSize]=stack_c_pop(s);
 		outSize++;
 	}
-  
-	//return the output string.
-	//test:
-	//printf("\n\nTest:%s\n\n",out);
-	//system("PAUSE");
-	//out = "93/11+-";
-	return out; 	
+	
+	return out;
 }
 
 
