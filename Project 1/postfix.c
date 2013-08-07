@@ -75,12 +75,14 @@ int calculate(char* p){
 	int i=0;
 	IntStack *s=stack_i_init();
 	
-	while(p[i]!=NULL)
+	//for(i=0;i<DEFAULT_SIZE;i++)
+	while(p[i]!='\0')
 	{
 		int num1, num2;
 		if(p[i]>='0' && p[i]<='9')
 		{
-			stack_i_push(s, p[i]-'0');
+			s->size++;
+			s->data[s->size]=p[i]-'0';
 		}
 		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
 		{
@@ -111,8 +113,11 @@ int calculate(char* p){
 				break;
 			}			
 		}
-		
-		i++;
+		else if(p[i]==NULL)
+		{
+			break;
+		}
+	i++;
 	}
 	
 	if(s->size>0)
@@ -133,11 +138,13 @@ char* convert(char* in){
 	int outSize=0;
 	
 	int i=0;
-	while(in[i]!=NULL)
+	//for(i=0;i<DEFAULT_SIZE;i++)
+	while(in[i]!='\0')
 	{
 		char c=in[i];
+		int ascii=(int)in[i];
 		
-		if(c>='0' && c<='9')
+		if(ascii>=48 && ascii<=57)
 		{
 			out[outSize]=c;
 			outSize++;
@@ -171,8 +178,7 @@ char* convert(char* in){
 			}
 			stack_c_pop(s);
 		}
-		
-		i++;
+	i++;
 	}
 	
 	while(s->size>-1)
@@ -184,57 +190,144 @@ char* convert(char* in){
 	return out;
 }
 
+/*psudocode:
+		
+		I have found problems with the pow function where sometimes like in the case of 10 to the power
+		of 3 it comes up as 999 instead of 1000. This is the case on my machine and so I
+		will program my own function so that this problem does not occur. I have decided not
+		to use Math.h because of this major flaw.
+
+		PowerFn Function:
+			recieves the number and power
+			checks if the power is 0
+				then output is then 1
+			checks if the output is 1
+				then the output is the inputted number
+			every other positive power is in the else statement
+				make the answer equal the input
+				run a for loop which loops the amount of times of the magnitude of the power
+					make the number times the answer from the previous loop
+				output the final number */
+
+int PowerFn (int no, int power)
+{
+	int j, ans;
+	if (power == 0)
+	{
+		ans = 1;
+	}
+	else if (power == 1)
+	{
+		ans = no;
+	}
+	else
+	{
+		ans = no;
+		for (j = 1; j < power; j++)
+		{
+			ans = ans*no;
+		}
+	}
+	return ans;
+}
 
 int calculate_extra(char* p){
-	int i;
+	int i=0;
 	IntStack *s=stack_i_init();
 	
-	while(p[i]!=NULL)
+	//for(i=0;i<DEFAULT_SIZE;i++)
+	while(p[i]!='\0')
 	{
 		int num1, num2;
+		int count =1;
+		int tempNo, tempNo2;
+		
+		//blank spaces later
 		if(p[i]>='0' && p[i]<='9')
 		{
-			stack_i_push(s, p[i]-'0');
+			tempNo = p[i]-'0';
+			//if it is a number then work out using powers of 10
+			//int tempNo;
+			//printf("\n\nTest: %c\n\n", p[i]);
+			i++;
 			
-			while(p[i+1]>='0' && p[i+1]>='9')
+			while(p[i] != ' ')
 			{
-				int temp=stack_i_pop(s);
+				if(p[i]==NULL)
+				{
+					break;
+				}
+				//printf("\n  cmNO: %d p at i: %d\n", tempNo, (int)(p[i]-'0'));
+				tempNo = ((tempNo)*(PowerFn(10,count)))+(p[i]-'0');
+				//printf("\n  poNO: %d\n", tempNo);
+				count++;
 				i++;
-				temp=(temp*10)+(p[i]-'0');
-				stack_i_push(s, temp);
+				
 			}
+			
+			//printf("\nNO: %d\n", tempNo);
+			s->size++;
+			s->data[s->size]=tempNo;			
 		}
 		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
 		{
-			if(s->size>0)
-			{
-				num1=stack_i_pop(s);
-				num2=stack_i_pop(s);
-			
-				switch(p[i])
+			//while(p[i] != ' ')
+			//{
+				//printf("\n\nTest: %c\n\n", p[i]);
+				if(p[i]==NULL)
 				{
-					case '+':
-						stack_i_push(s, (num2+num1));
-						break;
-					case '-':
-						stack_i_push(s, (num2-num1));
-						break;
-					case'*':
-						stack_i_push(s, (num2*num1));
-						break;
-					case '/':
-						stack_i_push(s, (num2/num1));
-						break;
+					break;
 				}
-			}
-			else
-			{
-				return -2000;
-				break;
-			}	
+				
+				if(s->size>0)
+				{
+					num1=stack_i_pop(s);
+					num2=stack_i_pop(s);
+				
+					switch(p[i])
+					{
+						case '+':
+							stack_i_push(s, (num2+num1));
+							break;
+						case '-':
+							stack_i_push(s, (num2-num1));
+							break;
+						case'*':
+							stack_i_push(s, (num2*num1));
+							break;
+						case '/':
+							stack_i_push(s, (num2/num1));
+							break;
+					}
+				}
+				else
+				{
+					return -2000;
+					break;
+				}
+				
+				if(p[i]==NULL)
+				{
+					break;
+				}
+				//i++;
+			//}
 		}
-			
-		i++;
+		else if(p[i]==NULL)
+		{
+			break;
+		}
+		
+		if (p[i]==' ')
+		{
+			//ignore the blank space but then move on.
+			//reset the count
+			count = 1;
+			//int tmpno = tempNo2;
+			//tempNo2=tempNo;
+			//tempNo = tmpno;
+		}
+	i++;
 	}
 	
 	if(s->size>0)
@@ -245,6 +338,11 @@ int calculate_extra(char* p){
 	{
 		int num=stack_i_pop(s);
 		free(s);
+		//check
+		//printf(" Test ans: %d\n",num);
 		return num;
 	}
+
 }
+
+
