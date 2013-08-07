@@ -4,10 +4,10 @@ CursorRow=120
 TopLine=113
 LeftChar=1
 Open=1
-Top=0
+Top=1
 [Editors]
 Order=0,1,2,3,4
-Focused=2
+Focused=0
 [Editor_1]
 Open=1
 Top=0
@@ -17,8 +17,8 @@ TopLine=1
 LeftChar=1
 [Editor_2]
 Open=1
-Top=1
-CursorCol=5
+Top=0
+CursorCol=1
 CursorRow=205
 TopLine=182
 LeftChar=1
