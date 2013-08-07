@@ -72,16 +72,15 @@ int  stack_i_peek(IntStack* s){
 /*********************************************************/
 int calculate(char* p){
 	
-	int i;
+	int i=0;
 	IntStack *s=stack_i_init();
 	
-	for(i=0;i<DEFAULT_SIZE;i++)
+	while(p[i]!=NULL)
 	{
 		int num1, num2;
 		if(p[i]>='0' && p[i]<='9')
 		{
-			s->size++;
-			s->data[s->size]=p[i]-'0';
+			stack_i_push(s, p[i]-'0');
 		}
 		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
 		{
@@ -112,10 +111,8 @@ int calculate(char* p){
 				break;
 			}			
 		}
-		else if(p[i]==NULL)
-		{
-			break;
-		}
+		
+		i++;
 	}
 	
 	if(s->size>0)
@@ -135,13 +132,12 @@ char* convert(char* in){
 	char* out=(char*)malloc(DEFAULT_SIZE*sizeof(char));
 	int outSize=0;
 	
-	int i;
-	for(i=0;i<DEFAULT_SIZE;i++)
+	int i=0;
+	while(in[i]!=NULL)
 	{
 		char c=in[i];
-		int ascii=(int)in[i];
 		
-		if(ascii>=48 && ascii<=57)
+		if(c>='0' && c<='9')
 		{
 			out[outSize]=c;
 			outSize++;
@@ -175,6 +171,8 @@ char* convert(char* in){
 			}
 			stack_c_pop(s);
 		}
+		
+		i++;
 	}
 	
 	while(s->size>-1)
@@ -191,17 +189,20 @@ int calculate_extra(char* p){
 	int i;
 	IntStack *s=stack_i_init();
 	
-	for(i=0;i<DEFAULT_SIZE;i++)
+	while(p[i]!=NULL)
 	{
 		int num1, num2;
-		if (p[i]==' ')
+		if(p[i]>='0' && p[i]<='9')
 		{
+			stack_i_push(s, p[i]-'0');
 			
-		}
-		else if(p[i]>='0' && p[i]<='9')
-		{
-			s->size++;
-			s->data[s->size]=p[i]-'0';
+			while(p[i+1]>='0' && p[i+1]>='9')
+			{
+				int temp=stack_i_pop(s);
+				i++;
+				temp=(temp*10)+(p[i]-'0');
+				stack_i_push(s, temp);
+			}
 		}
 		else if(p[i]=='+'|p[i]=='-'|p[i]=='*'|p[i]=='/')
 		{
@@ -230,12 +231,10 @@ int calculate_extra(char* p){
 			{
 				return -2000;
 				break;
-			}			
+			}	
 		}
-		else if(p[i]==NULL)
-		{
-			break;
-		}
+			
+		i++;
 	}
 	
 	if(s->size>0)
@@ -249,4 +248,3 @@ int calculate_extra(char* p){
 		return num;
 	}
 }
-
