@@ -10,18 +10,20 @@
 
 /* ------------- QUEUE FUNCTIONS ------------------ */
 Queue* queue_init(){
-
+	Queue *q=(Queue*)malloc(sizeof(Queue));
+	q->l=ll_init();
 }
 void queue_free(Queue *q){
-
+	ll_free(q->l);
+	free(q);
 }
 
 void queue_enqueue(Queue *q, int x, int y){
-
+	ll_addBack(q->l, x, y)
 }
 
 void queue_dequeue(Queue *q, int *x, int *y){
-
+	
 }
 
 int queue_size(Queue *q){
