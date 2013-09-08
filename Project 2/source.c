@@ -63,7 +63,34 @@ int stack_size(Stack *s){
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
 Grid* ReadWorld(const char* filename){
+	FILE *filey = fopen(filename, "r");
+	if (filey == NULL)
+	{
+		//printf("Error Opening File\n");	
+		//just ignore for now not really important for this
+	}	
+	
+	int i,j; //counters
+	Grid *theGrid = (Grid*)malloc(sizeof(Grid));
+	//printf("Vars\n");
+	fscanf(filey, "%d %d\n", &theGrid->rows, &theGrid->cols);
+	//printf("Read file\n");
+	theGrid -> data = (char**)malloc(sizeof(char*)*theGrid->rows);
+	//printf("The Grid malloc\n");
+	//printf("Size of The Grid: %d\n", (sizeof(theGrid)));
+	j = theGrid->rows;
+	//printf("J: %d\n", j);
+	
+	for(i=0;i<j;i++)
+	{
+		theGrid->data[i] = (char*)malloc(sizeof(char)*theGrid->cols);
+		fgets(theGrid->data[i], theGrid->cols+2, filey);
+		//printf("Data at i: %s Loop i: %d \n",theGrid->data[i], i);
+	}
 
+	fclose(filey);
+	//printf("End.\n");
+	return theGrid;
 }
 
 Search* FindPath(Grid* g){
