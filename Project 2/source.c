@@ -11,6 +11,7 @@
 Queue* queue_init(){
 	Queue *q=(Queue*)malloc(sizeof(Queue));
 	q->l=ll_init();
+	return q;
 }
 void queue_free(Queue *q){
 	ll_free(q->l);
@@ -34,6 +35,7 @@ int queue_size(Queue *q){
 Stack* stack_init(){
 	Stack *s = (Stack*)malloc(sizeof(Stack));
 	s->l=ll_init();
+	return s;
 }
 void stack_free(Stack *s){
 	ll_free(s->l);
