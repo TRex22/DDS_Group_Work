@@ -7,8 +7,28 @@
 #include "Stack.h"
 #include "Queue.h"
 
-//I swapped the stack and queue functions around since the program checks
-//stacks first.
+/* ------------- QUEUE FUNCTIONS ------------------ */
+Queue* queue_init(){
+	Queue *q=(Queue*)malloc(sizeof(Queue));
+	q->l=ll_init();
+}
+void queue_free(Queue *q){
+	ll_free(q->l);
+	free(q);
+}
+
+void queue_enqueue(Queue *q, int x, int y){
+	ll_addBack(q->l, x, y);
+}
+
+void queue_dequeue(Queue *q, int *x, int *y){
+	ll_getFront(q->l, x, y);
+}
+
+int queue_size(Queue *q){
+	return ll_size(q->l);
+}
+
 
 /* ------------- STACK FUNCTIONS ------------------ */
 Stack* stack_init(){
@@ -38,27 +58,6 @@ int stack_size(Stack *s){
 	return ll_size(s->l);
 }
 
-/* ------------- QUEUE FUNCTIONS ------------------ */
-Queue* queue_init(){
-	Queue *q=(Queue*)malloc(sizeof(Queue));
-	q->l=ll_init();
-}
-void queue_free(Queue *q){
-	ll_free(q->l);
-	free(q);
-}
-
-void queue_enqueue(Queue *q, int x, int y){
-	ll_addBack(q->l, x, y);
-}
-
-void queue_dequeue(Queue *q, int *x, int *y){
-	ll_getFront(q->l, x, y);
-}
-
-int queue_size(Queue *q){
-	return ll_size(q->l);
-}
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
 Grid* ReadWorld(const char* filename){
