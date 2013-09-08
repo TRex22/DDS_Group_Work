@@ -13,7 +13,7 @@
 /* ------------- STACK FUNCTIONS ------------------ */
 Stack* stack_init(){
 	Stack *s = (Stack*)malloc(sizeof(Stack));
-	s.l=ll_init();
+	s->l=ll_init();
 }
 void stack_free(Stack *s){
 	ll_free(s->l);
