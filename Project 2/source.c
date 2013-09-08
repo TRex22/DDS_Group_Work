@@ -7,6 +7,36 @@
 #include "Stack.h"
 #include "Queue.h"
 
+//I swapped the stack and queue functions around since the program checks
+//stacks first.
+
+/* ------------- STACK FUNCTIONS ------------------ */
+Stack* stack_init(){
+	Stack *s = (Stack*)malloc(sizeof(Stack));
+	s->l=ll_init();
+}
+void stack_free(Stack *s){
+	ll_free(s->l);
+	free(s);
+}
+
+void stack_push(Stack *s, int x, int y){
+	ll_addFront(s->l, x, y);
+}
+
+//will add if need be
+//with code provided the only way to peek
+//is to get front then add front
+//void stack_peek(Stack *s, int *x, int *y){	
+//}
+
+void stack_pop(Stack *s, int *x, int *y){
+	ll_getFront(s->l, x, y);
+}
+
+int stack_size(Stack *s){
+	return ll_size(s->l);
+}
 
 /* ------------- QUEUE FUNCTIONS ------------------ */
 Queue* queue_init(){
@@ -29,34 +59,6 @@ void queue_dequeue(Queue *q, int *x, int *y){
 int queue_size(Queue *q){
 	return ll_size(q->l);
 }
-
-/* ------------- STACK FUNCTIONS ------------------ */
-Stack* stack_init(){
-	Stack *s = (Stack*)malloc(sizeof(Stack));
-	s->l=ll_init();
-}
-void stack_free(Stack *s){
-	ll_free(s->l);
-	free(s);
-}
-
-void stack_push(Stack *s, int x, int y){
-	ll_addFront(s->l, x, y);
-}
-//will add if need be
-//with code provided the only way to peek
-//is to get front then add front
-//void stack_peek(Stack *s, int *x, int *y){	
-//}
-
-void stack_pop(Stack *s, int *x, int *y){
-	ll_getFront(s->l, x, y);
-}
-
-int stack_size(Stack *s){
-	return ll_size(s->l);
-}
-
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
 Grid* ReadWorld(const char* filename){
