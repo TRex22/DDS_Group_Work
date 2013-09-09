@@ -97,14 +97,36 @@ Search* FindPath(Grid* g){
 	//Pseudocode used to find shortest path using breadth first search algorithm provided
 	//by the project pack.
 	
+	int i, j;	
+	
 	//new queue
 	Queue *q = queue_init();	
 	//new stack
-	Stack *s = stack_init();
+	Search *s = (Search*)malloc(sizeof(Search));
+	s->s=stack_init();
 
 	//Initialise ParentR[Num Rows][Num Cols] to -2;
+	s->ParentR = (int**)malloc(sizeof(int*)*g->rows);
+		for(i=0;i<g->rows;i++)
+		{
+			s->ParentR[i]=(int*)malloc(sizeof(int)*g->cols);
+			s->ParentR[i]=-2;		
+		}
+	
 	//Initialise ParentC[Num Rows][Num Cols] to -2;
+	s->ParentC = (int**)malloc(sizeof(int*)*g->rows);
+		for(j=0;j<g->rows;j++)
+		{
+			s->ParentC[i]=(int*)malloc(sizeof(int)*g->cols);
+			s->ParentC[i]=-2;			
+		}
 	//Initialise Distance[Num Rows][Num Cols] to MAX INT;
+	s->Distance = (int**)malloc(sizeof(int*)*g->rows);
+		for(i=0;i<g->rows;i++)
+		{
+			s->Distance[i]=(int*)malloc(sizeof(int*)*g->cols);		
+			s->Distance[i]=MAX_INT;
+		}
 
 	//Distance[startR][startC] ← 0;
 	//ParentR[startR][startC] ← -1;
