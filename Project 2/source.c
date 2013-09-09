@@ -144,7 +144,7 @@ Search* FindPath(Grid* g){
 		//currR, currC ← Dequeue(q);
 		queue_dequeue(q, s->ParentR[count], s->ParentC[count]);
 		//if world[currR-1][currC] is open and undiscovered then
-		if 
+		//if 
 				//Distance[currR-1][currC] = Distance[currR][currC] + 1;
 				//ParentR[currR-1][currC] = currR;
 				//ParentC[currR-1][currC] = currC;
