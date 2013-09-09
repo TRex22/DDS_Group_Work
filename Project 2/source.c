@@ -97,7 +97,7 @@ Search* FindPath(Grid* g){
 	//Pseudocode used to find shortest path using breadth first search algorithm provided
 	//by the project pack.
 	
-	int i, j;	
+	int i, j, count = 1;	
 	
 	//new queue
 	Queue *q = queue_init();	
@@ -129,14 +129,22 @@ Search* FindPath(Grid* g){
 		}
 
 	//Distance[startR][startC] ← 0;
+	s->Distance[0]=0;
 	//ParentR[startR][startC] ← -1;
+	s->ParentR[0]=-1;
 	//ParentC[startR][startC] ← -1;
-
+	s->ParentC[0]=-1;
+	//printf("Hello\n");
+	
 	//Enqueue(q, startR, startC);
+	queue_enqueue(q, s->ParentR[0], s->ParentC[0]);
 	//while q isn’t empty and we haven’t discovered the goal do
+	while(q != NULL)
+	{
 		//currR, currC ← Dequeue(q);
-
+		queue_dequeue(q, s->ParentR[count], s->ParentC[count]);
 		//if world[currR-1][currC] is open and undiscovered then
+		if 
 				//Distance[currR-1][currC] = Distance[currR][currC] + 1;
 				//ParentR[currR-1][currC] = currR;
 				//ParentC[currR-1][currC] = currC;
@@ -163,8 +171,9 @@ Search* FindPath(Grid* g){
 				//ParentC[currR][currC+1] = currC;
 				//Enqueue(q, currR, currC+1);
 		//end if
+		count++;
 	//end while
-
+	}
 	//if the queue is empty and we never found the goal then
 		//return No Path to goal
 	//else
