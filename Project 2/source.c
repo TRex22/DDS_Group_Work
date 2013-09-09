@@ -94,7 +94,68 @@ Grid* ReadWorld(const char* filename){
 }
 
 Search* FindPath(Grid* g){
+	//Pseudocode used to find shortest path using breadth first search algorithm provided
+	//by the project pack.
+	
+	//new queue
+	Queue *q = queue_init();	
+	//new stack
+	Stack *s = stack_init();
 
+	//Initialise ParentR[Num Rows][Num Cols] to -2;
+	//Initialise ParentC[Num Rows][Num Cols] to -2;
+	//Initialise Distance[Num Rows][Num Cols] to MAX INT;
+
+	//Distance[startR][startC] ← 0;
+	//ParentR[startR][startC] ← -1;
+	//ParentC[startR][startC] ← -1;
+
+	//Enqueue(q, startR, startC);
+	//while q isn’t empty and we haven’t discovered the goal do
+		//currR, currC ← Dequeue(q);
+
+		//if world[currR-1][currC] is open and undiscovered then
+				//Distance[currR-1][currC] = Distance[currR][currC] + 1;
+				//ParentR[currR-1][currC] = currR;
+				//ParentC[currR-1][currC] = currC;
+				//Enqueue(q, currR-1, currC);
+		//end if
+
+		//if world[currR+1][currC] is open and undiscovered then
+				//Distance[currR+1][currC] = Distance[currR][currC] + 1;
+				//ParentR[currR+1][currC] = currR;
+				//ParentC[currR+1][currC] = currC;
+				//Enqueue(q, currR+1, currC);
+		//end if
+
+		//if world[currR][currC-1] is open and undiscovered then
+				//Distance[currR][currC-1] = Distance[currR][currC] + 1;
+				//ParentR[currR][currC-1] = currR;
+				//ParentC[currR][currC-1] = currC;
+				//Enqueue(q, currR, currC-1);
+		//end if
+
+		//if world[currR][currC+1] is open and undiscovered then
+				//Distance[currR][currC+1] = Distance[currR][currC] + 1;
+				//ParentR[currR][currC+1] = currR;
+				//ParentC[currR][currC+1] = currC;
+				//Enqueue(q, currR, currC+1);
+		//end if
+	//end while
+
+	//if the queue is empty and we never found the goal then
+		//return No Path to goal
+	//else
+		//currR, currC ← goalR, goalC;
+		//while we haven’t reached the source do
+			//Push(s, ParentR[currR][currC], ParentC[currR][currC]);
+			//currR, currC ← ParentR[currR][currC], ParentC[currR][currC];
+		//end while
+		// Popping items off of S will give the path in the correct order
+		//return the stack, s.
+	//end if
+//end function
+	
 
 }
 
