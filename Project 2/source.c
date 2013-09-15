@@ -14,8 +14,12 @@ Queue* queue_init(){
 	return q;
 }
 void queue_free(Queue *q){
-	ll_free(q->l);
-	free(q);
+	if(q->l != NULL)
+	{
+		ll_free(q->l);
+	}
+    q->l = NULL;
+    free(q);
 }
 
 void queue_enqueue(Queue *q, int x, int y){
@@ -94,8 +98,38 @@ Grid* ReadWorld(const char* filename){
 }
 
 Search* FindPath(Grid* g){
+	Queue* q=queue_init();
+	
+	Search* se=(Search*)malloc(sizeof(Search));
+	se->Length=0;
+	
+	se->ParentR=(int**)malloc(sizeof(int*));
+	int i;
+	for(i=0;i<g->rows;i++)
+	{
+		se->ParentR[i]=(int*)malloc(sizeof(int));
+		se->ParentR[i]=-2;
+	}
+	
+	se->ParentC=(int**)malloc(sizeof(int*));
+	for(i=0;i<g->rows;i++)
+	{
+		se->ParentC[i]=(int*)malloc(sizeof(int));
+		se->ParentC[i]=-2;
+	}
+
+	se->Distance=(int**)malloc(sizeof(int*));
+	for(i=0;i<g->rows;i++)
+	{
+		se->Distance[i]=(int*)malloc(sizeof(int));
+		se->Distance[i]=MAX_INT;
+	}
+	
+	
+	
+	/* Jason's code
 	//Pseudocode used to find shortest path using breadth first search algorithm provided
-	//by the project pack.
+	//by the sproject pack.
 	
 	int i, j, count = 1;	
 	
@@ -187,7 +221,7 @@ Search* FindPath(Grid* g){
 	//end if
 //end function
 	
-
+*/
 }
 
 /* --------------MISC FUNCTIONS--------------------- */
