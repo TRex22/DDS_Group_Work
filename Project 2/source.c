@@ -122,26 +122,34 @@ Grid* ReadWorld(const char* filename){
 
 Search* FindPath(Grid* g){
 	Queue* q=queue_init();
-	
+	//printf("1\n");
 	Search* se=(Search*)malloc(sizeof(Search));
+	//printf("2\n");
 	se->s=stack_init();
+	//printf("3\n");
 	se->Length=0;
+	//printf("4\n");
 	
 	se->ParentR=(int**)malloc(sizeof(int*));
+	//printf("5\n");
 	int i, j;
 	for(i=0;i<g->rows;i++)
 	{
 		se->ParentR[i]=(int*)malloc(sizeof(int));
+		printf("6\n");
 		for(j=0;j<g->cols;j++)
-		{
+		{	
+			printf ("test i: %d j: %d\n",i,j);
 			se->ParentR[i][j]=-2;
 		}
 	}
-	
+	printf("working here...");
 	se->ParentC=(int**)malloc(sizeof(int*));
+	printf("7\n");
 	for(i=0;i<g->rows;i++)
 	{
 		se->ParentC[i]=(int*)malloc(sizeof(int));
+		printf("8\n");
 		for(j=0;j<g->cols;j++)
 		{
 			se->ParentC[i][j]=-2;
@@ -149,9 +157,11 @@ Search* FindPath(Grid* g){
 	}
 
 	se->Distance=(int**)malloc(sizeof(int*));
+	printf("9\n");
 	for(i=0;i<g->rows;i++)
 	{
 		se->Distance[i]=(int*)malloc(sizeof(int));
+		printf("10\n");
 		for(j=0;j<g->cols;j++)
 		{
 			se->Distance[i][j]=MAX_INT;
