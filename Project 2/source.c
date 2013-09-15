@@ -67,7 +67,8 @@ int stack_size(Stack *s){
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
 Grid* ReadWorld(const char* filename){
-	Grid* g=(Grid*)malloc(sizeof(Grid));
+	//Ariels code broken
+	/*Grid* g=(Grid*)malloc(sizeof(Grid));
 	
 	FILE *f=fopen(filename, "r");
 	
@@ -87,9 +88,9 @@ Grid* ReadWorld(const char* filename){
 	
 	fclose(f);
 	
-	return g;
+	return g;*/
 	
-	/*FILE *filey = fopen(filename, "r");
+	FILE *filey = fopen(filename, "r");
 	if (filey == NULL)
 	{
 		//printf("Error Opening File\n");	
@@ -116,7 +117,7 @@ Grid* ReadWorld(const char* filename){
 
 	fclose(filey);
 	//printf("End.\n");
-	return theGrid;*/
+	return theGrid;
 }
 
 Search* FindPath(Grid* g){
