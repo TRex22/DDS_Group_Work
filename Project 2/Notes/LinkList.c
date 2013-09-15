@@ -57,7 +57,8 @@ void ll_getFront(LinkList *l, int *x, int *y){
     Link *temp; 
 
     if(ll_size(l) <= 0){
-        error("Tried to get value from empty linked list.");
+	printf("Tried to get value from empty linked list.\n");
+	exit(1);
     }
 
     temp = l->head;
