@@ -224,74 +224,76 @@ Search* FindPath(Grid* g){
 	//*q = enqueue(*startR, *startC);
 	q->enqueue(startR, startC);
 	
-	int *currR, *currC;
-	*currR = startR;
-	*currC = startC;
+	int currR, currC;
+			//printf("hello\n");
+	currR = startR;
+	currC = startC;
 	//printf("Rows: %d Cols: %d\n",rows,cols);
 	//printf("queue size: %d\n",q->size());
-	while((q->size())!=0 && g->data[*currR][*currC]!='G')
+			//printf("hello\n");
+	while((q->size())!=0 && g->data[currR][currC]!='G')
 	{
-		printf("hello\n");
+
 		//printf("Rows: %d Cols: %d\n",rows,cols);
-		q->enqueue(*currR, *currC);
+		q->enqueue(currR, currC);
 		
 		//up
-		if(g->data[*currR-1][*currC]==' ' && se->ParentR[*currR-1][*currC]==-2 && se->ParentC[*currR-1][*currC]==-2)
+		if(g->data[currR-1][currC]==' ' && se->ParentR[currR-1][currC]==-2 && se->ParentC[currR-1][currC]==-2)
 		{
-			se->Distance[*currR-1][*currC] = se->Distance[*currR][*currC] + 1;
-			se->ParentR[*currR-1][*currC] = *currR;
-			se->ParentC[*currR-1][*currC] = *currC;
-			q->enqueue(*currR-1, *currC);
+			se->Distance[currR-1][currC] = se->Distance[currR][currC] + 1;
+			se->ParentR[currR-1][currC] = currR;
+			se->ParentC[currR-1][currC] = currC;
+			q->enqueue(currR-1, currC);
 		}
 		
 		//down
-		if(g->data[*currR+1][*currC]==' ' && se->ParentR[*currR+1][*currC]==-2 && se->ParentC[*currR+1][*currC]==-2)
+		if(g->data[currR+1][currC]==' ' && se->ParentR[currR+1][currC]==-2 && se->ParentC[currR+1][currC]==-2)
 		{
-			se->Distance[*currR+1][*currC] = se->Distance[*currR][*currC] + 1;
-			se->ParentR[*currR+1][*currC] = *currR;
-			se->ParentC[*currR+1][*currC] = *currC;
-			q->enqueue(*currR+1, *currC);
+			se->Distance[currR+1][currC] = se->Distance[currR][currC] + 1;
+			se->ParentR[currR+1][currC] = currR;
+			se->ParentC[currR+1][currC] = currC;
+			q->enqueue(currR+1, currC);
 		}
 		
 		//left
-		if(g->data[*currR][*currC-1]==' ' && se->ParentR[*currR][*currC-1]==-2 && se->ParentC[*currR][*currC-1]==-2)
+		if(g->data[currR][currC-1]==' ' && se->ParentR[currR][currC-1]==-2 && se->ParentC[currR][currC-1]==-2)
 		{
-			se->Distance[*currR][*currC-1] = se->Distance[*currR][*currC] + 1;
-			se->ParentR[*currR][*currC-1] = *currR;
-			se->ParentC[*currR][*currC-1] = *currC;
-			q->enqueue(*currR, *currC-1);
+			se->Distance[currR][currC-1] = se->Distance[currR][currC] + 1;
+			se->ParentR[currR][currC-1] = currR;
+			se->ParentC[currR][currC-1] = currC;
+			q->enqueue(currR, currC-1);
 		}
 		
 		//right
-		if(g->data[*currR][*currC+1]==' ' && se->ParentR[*currR][*currC+1]==-2 && se->ParentC[*currR][*currC+1]==-2)
+		if(g->data[currR][currC+1]==' ' && se->ParentR[currR][currC+1]==-2 && se->ParentC[currR][currC+1]==-2)
 		{
-			se->Distance[*currR][*currC+1] = se->Distance[*currR][*currC] + 1;
-			se->ParentR[*currR][*currC+1] = *currR;
-			se->ParentC[*currR][*currC+1] = *currC;
-			q->enqueue(*currR, *currC+1);
+			se->Distance[currR][currC+1] = se->Distance[currR][currC] + 1;
+			se->ParentR[currR][currC+1] = currR;
+			se->ParentC[currR][currC+1] = currC;
+			q->enqueue(currR, currC+1);
 		}
 	}
 	
-	if(q->size()==0 && g->data[*currR][*currC]!='G')
+	if(q->size()==0 && g->data[currR][currC]!='G')
 	{
 		se->Length=-1;
 		return se;
 	}
 	else
 	{
-		se->Length=se->Distance[*currR][*currC];
-		se->s->push(*currR, *currC);
+		se->Length=se->Distance[currR][currC];
+		se->s->push(currR, currC);
 		//se->s->
 		do
 		{
-			if(*currR!=-1 && *currC!=-1)
+			if(currR!=-1 && currC!=-1)
 			{
-				se->s->push(se->ParentR[*currR][*currC], se->ParentC[*currR][*currC]);
+				se->s->push(se->ParentR[currR][currC], se->ParentC[currR][currC]);
 			}
-			int tempR = *currR, tempC=*currC;
-			*currR=se->ParentR[tempR][tempC];
-			*currC=se->ParentC[tempR][tempC];	
-		}while(*currR!=startR || *currC!=startC);
+			int tempR = currR, tempC=currC;
+			currR=se->ParentR[tempR][tempC];
+			currC=se->ParentC[tempR][tempC];	
+		}while(currR!=startR || currC!=startC);
 		
 		return se;
 	}
