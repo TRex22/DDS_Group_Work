@@ -111,14 +111,19 @@ Grid* ReadWorld(const char* filename){
 	theGrid -> data = (char**)malloc(sizeof(char*)*theGrid->rows);
 	//printf("The Grid malloc\n");
 	//printf("Size of The Grid: %d\n", (sizeof(theGrid)));
-	j = theGrid->rows;
+	//j = theGrid->rows;
 	//printf("J: %d\n", j);
 	
-	for(i=0;i<j;i++)
+	for(i=0;i<theGrid->rows;i++)
 	{
 		theGrid->data[i] = (char*)malloc(sizeof(char)*theGrid->cols);
-		fgets(theGrid->data[i], theGrid->cols+2, filey);
+		//printf("%s",theGrid->data[i]);
 		//printf("Data at i: %s Loop i: %d \n",theGrid->data[i], i);
+	}
+	
+	for (i=0;i<theGrid->rows;i++)
+	{
+		fgets(theGrid->data[i], theGrid->cols+2, filey);
 	}
 
 	fclose(filey);
