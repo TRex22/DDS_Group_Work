@@ -5,12 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <cstdio>
-
-	#ifdef _WIN32
-		#include <SDL/SDL.h>
-	#else
-		#include "include/SDL.h"
-	#endif
+#include <SDL/SDL.h>
 
 class Screen{
 	public:
