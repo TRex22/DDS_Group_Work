@@ -12,10 +12,12 @@
 Queue::Queue(){
 	//Queue *q=(Queue*)malloc(sizeof(Queue));
 	//q->l=new LinkList();
-	l=new LinkList();
+	//l=new LinkList();
 	//size =0;
 	//return q;
-	
+	//printf("hello");
+	l = new LinkList();
+	//l->mysize=0;
 }
 Queue::~Queue(){
     if(l != NULL)
@@ -30,7 +32,8 @@ void Queue::enqueue(int x, int y){
 void Queue::dequeue(int &x, int &y){
 	if (l->head== NULL)
 	{
-		return;
+		//return;
+		//kill bot
 	}
 	else
 	{
@@ -40,13 +43,26 @@ void Queue::dequeue(int &x, int &y){
 }
 
 int Queue::size(){
-	return size();
+	return l->mysize;
 }
 
 /* ------------- STACK FUNCTIONS ------------------ */
 Stack::Stack(){
 	//size = 0;
+	//printf("hello");
+	//Stack *s = (Stack*)malloc(sizeof(Stack));
+	//s->l = new LinkList();
+	
+	//mysize auto set to 0
 	l = new LinkList();
+	
+	//l->mysize=0;
+	//l = new LinkList();
+	//s->l->mysize = 0;
+	//mysize = 0;
+	//s->l->mysize=0;
+	//printf("size %d\n", size());
+	//return s;
 }
 
 Stack::~Stack(){
@@ -61,7 +77,8 @@ void Stack::push(int x, int y){
 void Stack::pop(int &x, int &y){
 	if (l->head== NULL)
 	{
-		return;
+		//return;
+		//kill bot
 	}
 	else
 	{
@@ -70,7 +87,8 @@ void Stack::pop(int &x, int &y){
 }
 
 int Stack::size(){
-	return size();
+	//printf("booby");
+	return l->mysize;
 }
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
