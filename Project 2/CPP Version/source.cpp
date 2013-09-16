@@ -224,10 +224,10 @@ Search* FindPath(Grid* g){
 	//*q = enqueue(*startR, *startC);
 	q->enqueue(*startR, *startC);
 	
-	int *currR, *currC;
+	int *currR = startR, *currC = startR;
 	//printf("Rows: %d Cols: %d\n",rows,cols);
-	
-	while(q->size()!=0 && g->data[*currR][*currC]!='G')
+	//printf("queue size: %d\n",q->size());
+	while((q->size())!=0 && g->data[*currR][*currC]!='G')
 	{
 		//printf("Rows: %d Cols: %d\n",rows,cols);
 		q->enqueue(*currR, *currC);
