@@ -135,20 +135,25 @@ Search* FindPath(Grid* g){
 	//printf("3\n");
 	se->Length=0;
 	//printf("4\n");
-	
-	se->ParentR=(int**)malloc(sizeof(int*));
-	//printf("5\n");
 	int i=0, j=0, rows = g->rows, cols = g->cols;
+	
+	se->ParentR=(int**)malloc(sizeof(int*)*rows);
+	//printf("5\n");
+	
 	//printf("Here\n");
 	//printf("Rows %d\n", rows);
 	//printf("i: %d",i);
+	
+	//system.end(0);
+	
 	for(i=0;i<rows;i++)
 	{
+		//break;
 		//printf("Rows %d\n", rows);
 		
 		//system("sleep(1000)");
 		//printf("%d\n",i);
-		se->ParentR[i]=(int*)malloc(sizeof(int));
+		se->ParentR[i]=(int*)malloc(sizeof(int)*cols);
 		//printf("6\n");
 		//cant access i=1...n
 	}
@@ -163,11 +168,11 @@ Search* FindPath(Grid* g){
 		}
 	}
 	//printf("working here...");
-	se->ParentC=(int**)malloc(sizeof(int*));
+	se->ParentC=(int**)malloc(sizeof(int*)*rows);
 	//printf("7\n");
 	for(i=0;i<rows;i++)
 	{
-		se->ParentC[i]=(int*)malloc(sizeof(int));
+		se->ParentC[i]=(int*)malloc(sizeof(int)*cols);
 		//printf("8\n");
 	}
 	for(i=0;i<rows;i++)
@@ -178,13 +183,19 @@ Search* FindPath(Grid* g){
 			se->ParentC[i][j]=-2;
 		}
 	}
-
-	se->Distance=(int**)malloc(sizeof(int*));
+	//printf("Test\n");
+	se->Distance=(int**)malloc(sizeof(int*)*rows);
 	//printf("9\n");
+	
 	for(i=0;i<rows;i++)
 	{
-		se->Distance[i]=(int*)malloc(sizeof(int));
+		se->Distance[i]=(int*)malloc(sizeof(int)*cols);
 		//printf("10\n");
+		
+	}
+	
+	for(i=0;i<rows;i++)
+	{
 		for(j=0;j<cols;j++)
 		{
 			se->Distance[i][j]=MAX_INT;
@@ -209,13 +220,16 @@ Search* FindPath(Grid* g){
 	se->Distance[*startR][*startC]=0;
 	se->ParentR[*startR][*startC]=-1;
 	se->ParentC[*startR][*startC]=-1;
-	
+	//printf("Rows: %d Cols: %d\n",rows,cols);
 	//*q = enqueue(*startR, *startC);
 	q->enqueue(*startR, *startC);
 	
 	int *currR, *currC;
+	//printf("Rows: %d Cols: %d\n",rows,cols);
+	
 	while(q->size()!=0 && g->data[*currR][*currC]!='G')
 	{
+		//printf("Rows: %d Cols: %d\n",rows,cols);
 		q->enqueue(*currR, *currC);
 		
 		//up
