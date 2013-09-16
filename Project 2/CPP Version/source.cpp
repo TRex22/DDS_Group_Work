@@ -124,7 +124,140 @@ Grid* ReadWorld(const char* filename){
 }
 
 Search* FindPath(Grid* g){
+	Queue *q = new Queue();
+	//printf("1\n");
+	Search* se=(Search*)malloc(sizeof(Search));
+	//printf("2\n");
+	se->s=new Stack();
+	//printf("3\n");
+	se->Length=0;
+	//printf("4\n");
+	
+	se->ParentR=(int**)malloc(sizeof(int*));
+	//printf("5\n");
+	int i, j;
+	for(i=0;i<g->rows;i++)
+	{
+		se->ParentR[i]=(int*)malloc(sizeof(int));
+		//printf("6\n");
+		for(j=0;j<g->cols;j++)
+		{	
+			//printf ("test i: %d j: %d\n",i,j);
+			se->ParentR[i][j]=-2;
+		}
+	}
+	//printf("working here...");
+	se->ParentC=(int**)malloc(sizeof(int*));
+	//printf("7\n");
+	for(i=0;i<g->rows;i++)
+	{
+		se->ParentC[i]=(int*)malloc(sizeof(int));
+		//printf("8\n");
+		for(j=0;j<g->cols;j++)
+		{
+			se->ParentC[i][j]=-2;
+		}
+	}
 
+	se->Distance=(int**)malloc(sizeof(int*));
+	//printf("9\n");
+	for(i=0;i<g->rows;i++)
+	{
+		se->Distance[i]=(int*)malloc(sizeof(int));
+		//printf("10\n");
+		for(j=0;j<g->cols;j++)
+		{
+			se->Distance[i][j]=MAX_INT;
+		}
+	}
+	
+	i=0, j=0;
+	int *startR, *startC;
+	for(i=0;i<g->rows;i++)
+	{
+		for(j=0;j<g->cols;j++)
+		{
+			if(g->data[i][j]=='S')
+			{
+				*startR=i;
+				*startC=j;
+				break;
+			}
+		}
+	}
+	
+	se->Distance[*startR][*startC]=0;
+	se->ParentR[*startR][*startC]=-1;
+	se->ParentC[*startR][*startC]=-1;
+	
+	//*q = enqueue(*startR, *startC);
+	q->enqueue(*startR, *startC);
+	
+	int *currR, *currC;
+	while(q->size()!=0 && g->data[*currR][*currC]!='G')
+	{
+		q->enqueue(*currR, *currC);
+		
+		//up
+		if(g->data[*currR-1][*currC]==' ' && se->ParentR[*currR-1][*currC]==-2 && se->ParentC[*currR-1][*currC]==-2)
+		{
+			se->Distance[*currR-1][*currC] = se->Distance[*currR][*currC] + 1;
+			se->ParentR[*currR-1][*currC] = *currR;
+			se->ParentC[*currR-1][*currC] = *currC;
+			q->enqueue(*currR-1, *currC);
+		}
+		
+		//down
+		if(g->data[*currR+1][*currC]==' ' && se->ParentR[*currR+1][*currC]==-2 && se->ParentC[*currR+1][*currC]==-2)
+		{
+			se->Distance[*currR+1][*currC] = se->Distance[*currR][*currC] + 1;
+			se->ParentR[*currR+1][*currC] = *currR;
+			se->ParentC[*currR+1][*currC] = *currC;
+			q->enqueue(*currR+1, *currC);
+		}
+		
+		//left
+		if(g->data[*currR][*currC-1]==' ' && se->ParentR[*currR][*currC-1]==-2 && se->ParentC[*currR][*currC-1]==-2)
+		{
+			se->Distance[*currR][*currC-1] = se->Distance[*currR][*currC] + 1;
+			se->ParentR[*currR][*currC-1] = *currR;
+			se->ParentC[*currR][*currC-1] = *currC;
+			q->enqueue(*currR, *currC-1);
+		}
+		
+		//right
+		if(g->data[*currR][*currC+1]==' ' && se->ParentR[*currR][*currC+1]==-2 && se->ParentC[*currR][*currC+1]==-2)
+		{
+			se->Distance[*currR][*currC+1] = se->Distance[*currR][*currC] + 1;
+			se->ParentR[*currR][*currC+1] = *currR;
+			se->ParentC[*currR][*currC+1] = *currC;
+			q->enqueue(*currR, *currC+1);
+		}
+	}
+	
+	if(q->size()==0 && g->data[*currR][*currC]!='G')
+	{
+		se->Length=-1;
+		return se;
+	}
+	else
+	{
+		se->Length=se->Distance[*currR][*currC];
+		se->s->push(*currR, *currC);
+		//se->s->
+		do
+		{
+			if(*currR!=-1 && *currC!=-1)
+			{
+				se->s->push(se->ParentR[*currR][*currC], se->ParentC[*currR][*currC]);
+			}
+			int tempR = *currR, tempC=*currC;
+			*currR=se->ParentR[tempR][tempC];
+			*currC=se->ParentC[tempR][tempC];	
+		}while(*currR!=*startR || *currC!=*startC);
+		
+		return se;
+	}
 }
 
 /* --------------MISC FUNCTIONS--------------------- */
