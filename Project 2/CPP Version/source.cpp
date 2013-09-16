@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
+#include <cstdio>
+
 #include "Grid.h"
 
 #include "LinkList.h"
@@ -135,37 +138,54 @@ Search* FindPath(Grid* g){
 	
 	se->ParentR=(int**)malloc(sizeof(int*));
 	//printf("5\n");
-	int i, j;
-	for(i=0;i<g->rows;i++)
+	int i=0, j=0, rows = g->rows, cols = g->cols;
+	//printf("Here\n");
+	//printf("Rows %d\n", rows);
+	//printf("i: %d",i);
+	for(i=0;i<rows;i++)
 	{
+		//printf("Rows %d\n", rows);
+		
+		//system("sleep(1000)");
+		//printf("%d\n",i);
 		se->ParentR[i]=(int*)malloc(sizeof(int));
 		//printf("6\n");
-		for(j=0;j<g->cols;j++)
+		//cant access i=1...n
+	}
+	//printf("Here\n");
+	for(i=0;i<rows;i++)
+	{
+		for(j=0;j<cols;j++)
 		{	
 			//printf ("test i: %d j: %d\n",i,j);
+			//se->ParentR[1][1]=-2;
 			se->ParentR[i][j]=-2;
 		}
 	}
 	//printf("working here...");
 	se->ParentC=(int**)malloc(sizeof(int*));
 	//printf("7\n");
-	for(i=0;i<g->rows;i++)
+	for(i=0;i<rows;i++)
 	{
 		se->ParentC[i]=(int*)malloc(sizeof(int));
 		//printf("8\n");
-		for(j=0;j<g->cols;j++)
+	}
+	for(i=0;i<rows;i++)
+	{
+		for(j=0;j<cols;j++)
 		{
+			//printf("%d\n",i);
 			se->ParentC[i][j]=-2;
 		}
 	}
 
 	se->Distance=(int**)malloc(sizeof(int*));
 	//printf("9\n");
-	for(i=0;i<g->rows;i++)
+	for(i=0;i<rows;i++)
 	{
 		se->Distance[i]=(int*)malloc(sizeof(int));
 		//printf("10\n");
-		for(j=0;j<g->cols;j++)
+		for(j=0;j<cols;j++)
 		{
 			se->Distance[i][j]=MAX_INT;
 		}
@@ -173,9 +193,9 @@ Search* FindPath(Grid* g){
 	
 	i=0, j=0;
 	int *startR, *startC;
-	for(i=0;i<g->rows;i++)
+	for(i=0;i<rows;i++)
 	{
-		for(j=0;j<g->cols;j++)
+		for(j=0;j<cols;j++)
 		{
 			if(g->data[i][j]=='S')
 			{
