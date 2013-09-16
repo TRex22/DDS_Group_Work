@@ -203,32 +203,35 @@ Search* FindPath(Grid* g){
 	}
 	
 	i=0, j=0;
-	int *startR, *startC;
+	int startR, startC;
 	for(i=0;i<rows;i++)
 	{
 		for(j=0;j<cols;j++)
 		{
 			if(g->data[i][j]=='S')
 			{
-				*startR=i;
-				*startC=j;
+				startR=i;
+				startC=j;
 				break;
 			}
 		}
 	}
 	
-	se->Distance[*startR][*startC]=0;
-	se->ParentR[*startR][*startC]=-1;
-	se->ParentC[*startR][*startC]=-1;
+	se->Distance[startR][startC]=0;
+	se->ParentR[startR][startC]=-1;
+	se->ParentC[startR][startC]=-1;
 	//printf("Rows: %d Cols: %d\n",rows,cols);
 	//*q = enqueue(*startR, *startC);
-	q->enqueue(*startR, *startC);
+	q->enqueue(startR, startC);
 	
-	int *currR = startR, *currC = startR;
+	int *currR, *currC;
+	*currR = startR;
+	*currC = startC;
 	//printf("Rows: %d Cols: %d\n",rows,cols);
 	//printf("queue size: %d\n",q->size());
 	while((q->size())!=0 && g->data[*currR][*currC]!='G')
 	{
+		printf("hello\n");
 		//printf("Rows: %d Cols: %d\n",rows,cols);
 		q->enqueue(*currR, *currC);
 		
@@ -288,7 +291,7 @@ Search* FindPath(Grid* g){
 			int tempR = *currR, tempC=*currC;
 			*currR=se->ParentR[tempR][tempC];
 			*currC=se->ParentC[tempR][tempC];	
-		}while(*currR!=*startR || *currC!=*startC);
+		}while(*currR!=startR || *currC!=startC);
 		
 		return se;
 	}
