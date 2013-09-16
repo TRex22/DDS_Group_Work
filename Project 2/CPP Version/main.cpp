@@ -1,32 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
+#include <iomanip>
+
 #include "LinkList.h"
 #include "Stack.h"
 #include "Queue.h"
 
 #include "Grid.h"
 
+using namespace std;
+
 int counter;
 
 void assert_i(int program, int ideal, const char* msg){
     counter++;
     if(program == ideal)
-        printf("%4d - Correct - %s\n", counter, msg);
+        //printf("%4d - Correct - %s\n", counter, msg);
+        cout << "    " <<std::setprecision(4)<<counter <<" - Correct - " << msg <<endl;
     else
-        printf("%4d - Wrong   - %s - program=%d, ideal=%d\n", counter, msg, program, ideal);
+        //printf("%4d - Wrong   - %s - program=%d, ideal=%d\n", counter, msg, program, ideal);
+        cout<< "    " << std::setprecision(4)<<counter << " - Wrong   - " << msg << " - program=" <<program<<", ideal="<<ideal<<endl;
 }
 
 void assert_p(int pX, int pY, int iX, int iY, const char* msg){
     counter++;
     if(pX == iX && pY == iY)
-        printf("%4d - Correct - %s\n", counter, msg);
+        //printf("%4d - Correct - %s\n", counter, msg);
+        cout << "    " <<std::setprecision(4)<<counter <<" - Correct - " << msg <<endl;
     else
-        printf("%4d - Wrong   - %s - pX=%d,pY=%d iX=%d,iY=%d\n", counter, msg, pX, pY, iX, iY);
+        //printf("%4d - Wrong   - %s - pX=%d,pY=%d iX=%d,iY=%d\n", counter, msg, pX, pY, iX, iY);
+        cout << "    " <<std::setprecision(4)<<counter<<" - Wrong   - "<<msg<<" - pX="<<pX<<",pY="<<pY<<" iX="<<iX<<",iY="<<iY<<endl;
 }
 
 int ll_check(){
-    printf("Testing Linked Lists Functions\n");
+    //printf("Testing Linked Lists Functions\n");
+    cout << "Testing Linked Lists Functions" << endl;
     LinkList l;
 
     counter = 0;
@@ -72,8 +82,9 @@ int ll_check(){
 }
 
 void stack_check(){
-    printf("Testing Stack Functions\n");
-    Stack s;
+    //printf("Testing Stack Functions\n");
+    cout << "Testing Stack Functions" << endl;
+	Stack s;
     assert_i(s.size(), 0, "Check Stack Size after init");
 
     s.push(1, -1); assert_i(s.size(), 1, "Check Stack Size after Push");
@@ -98,7 +109,8 @@ void stack_check(){
 }
 
 void queue_check(){
-    printf("Testing Queue Functions\n");
+    //printf("Testing Queue Functions\n");
+    cout << "Testing Queue Functions" << endl;
     Queue q;
     assert_i(q.size(), 0, "Check Queue Size after init");
 
@@ -124,7 +136,8 @@ void queue_check(){
 }
 
 void read_check(){
-    printf("Testing ReadWorld(...) World1\n");
+    //printf("Testing ReadWorld(...) World1\n");
+    cout << "Testing ReadWorld(...) World1" << endl;
     Grid *g;
     g = ReadWorld("world1.txt");
 
@@ -156,10 +169,13 @@ void read_check(){
     }
     counter++;
     if(correct){
-        printf("%4d - Correct - World1 Content\n", counter);
+        //printf("%4d - Correct - World1 Content\n", counter);
+        cout << "    " <<std::setprecision(4)<<counter<<" - Correct - World1 Content"<<endl;
+        
     }else{
-        printf("%4d - Wrong   - World1 Content\n", counter);
-    
+        //printf("%4d - Wrong   - World1 Content\n", counter);
+    	cout << "    " <<std::setprecision(4)<<counter<<" - Wrong   - World1 Content"<<endl;
+    	
     }
     for(i = 0; i < g->rows; i++){
         delete[] g->data[i];
@@ -167,7 +183,8 @@ void read_check(){
     delete g->data;
     delete g;
 
-    printf("Testing ReadWorld(...) World2\n");
+    //printf("Testing ReadWorld(...) World2\n");
+    cout << "Testing ReadWorld(...) World2" << endl;
     g = ReadWorld("world2.txt");
 
     assert_i(g->rows, 11, "ReadWorld - Rows");
@@ -194,10 +211,13 @@ void read_check(){
     }
     counter++;
     if(correct){
-        printf("%4d - Correct - World2 Content\n", counter);
+        //printf("%4d - Correct - World2 Content\n", counter);
+        cout << "    " <<std::setprecision(4)<<counter<<" - Correct - World2 Content"<<endl;
+        
     }else{
-        printf("%4d - Wrong   - World2 Content\n", counter);
-    
+        //printf("%4d - Wrong   - World2 Content\n", counter);
+    	cout << "    " <<std::setprecision(4)<<counter<<" - Wrong   - World2 Content"<<endl;
+    	
     }
     for(i = 0; i < g->rows; i++){
         delete[] g->data[i];
@@ -207,7 +227,8 @@ void read_check(){
 }
 
 void path_check1(){
-    printf("Testing FindPath(...) on World1\n");
+    //printf("Testing FindPath(...) on World1\n");
+    cout << "Testing FindPath(...) on World1" << endl;
     Grid *g;
     g = ReadWorld("world1.txt");
     
@@ -277,8 +298,9 @@ void path_check1(){
     }
     assert_i(correct_dist, 1, "Distance Array - World1");
 
-    printf("Path (Not Marked):\n");
-    for(i = 0; i < 14; i++){
+    //printf("Path (Not Marked):\n");
+    cout << "Path (Not Marked):" << endl;
+	for(i = 0; i < 14; i++){
         for(j = 0; j < 17; j++){
             printf("%c", g->data[i][j]);
         }
@@ -288,7 +310,8 @@ void path_check1(){
 }
 
 void path_check2(){
-    printf("Testing FindPath(...) on World2\n");
+    //printf("Testing FindPath(...) on World2\n");
+    cout << "Testing FindPath(...) on World2" << endl;
     int i, j;
     Grid *g;
     g = ReadWorld("world2.txt");
@@ -331,6 +354,18 @@ int main(){
     read_check();
     path_check1();
     path_check2();
-
+	//add graphics stuff here
+	cout << "\nPress Any Key to Continue...." << endl;
+	getchar();
+	
+	
+	
+	//end and free stuff
+	std::cout.flush();
+	free(stdin);
+	free(stdout);
+	cout << "\nPress Any Key to Exit...." << endl;
+	getchar();
+	//system("pause");
     return 0;
 }

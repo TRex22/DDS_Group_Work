@@ -1,2 +1,2 @@
 all:
-	g++ -g -o main main.cpp LinkList.cpp source.cpp -static-libstdc++ -static-libgcc
+	g++ -g -o Project2CPP.exe main.cpp LinkList.cpp source.cpp -static-libstdc++ -static-libgcc
