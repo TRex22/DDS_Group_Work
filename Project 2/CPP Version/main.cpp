@@ -221,6 +221,7 @@ void path_check1(){
     int last_currR, last_currC;
     int continuous = 1;
     int diffR, diffC;
+    int i, j;
 
     s->s->pop(last_currR, last_currC);
 
@@ -265,7 +266,7 @@ void path_check1(){
                           {MAX_INT,      5,      4,      3,      2,      3,      4,      5,      6,      7,      8,      9,     10,     11,     12,     13,MAX_INT},
                           {MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT,MAX_INT}};
 
-    int correct_dist = 1, i,j;
+    int correct_dist = 1;// i,j;
     // Compare Calculated Distances to Model Solution. We only check for the distances less than the path length (you can stop calculating distances when you find the goal).
     for(i = 0; i < 14; i++){
         for(j = 0; j < 17; j++){

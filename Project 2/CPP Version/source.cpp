@@ -46,7 +46,7 @@ void Queue::dequeue(int &x, int &y){
 }
 
 int Queue::size(){
-	return l->mysize;
+	return l->size();
 }
 
 /* ------------- STACK FUNCTIONS ------------------ */
@@ -91,12 +91,12 @@ void Stack::pop(int &x, int &y){
 
 int Stack::size(){
 	//printf("booby");
-	return l->mysize;
+	return l->size();
 }
 
 /* ------------- SEARCH FUNCTIONS ------------------ */
 Grid* ReadWorld(const char* filename){
-	FILE *filey = fopen(filename, "r");
+	FILE *filey = fopen(filename, "r+");
 	if (filey == NULL)
 	{
 		//printf("Error Opening File\n");	
@@ -104,11 +104,11 @@ Grid* ReadWorld(const char* filename){
 	}	
 	
 	int i,j; //counters
-	Grid *theGrid = (Grid*)malloc(sizeof(Grid));
+	Grid *theGrid = new Grid;
 	//printf("Vars\n");
 	fscanf(filey, "%d %d\n", &theGrid->rows, &theGrid->cols);
 	//printf("Read file\n");
-	theGrid -> data = (char**)malloc(sizeof(char*)*theGrid->rows);
+	theGrid -> data = new char*[theGrid->rows];
 	//printf("The Grid malloc\n");
 	//printf("Size of The Grid: %d\n", (sizeof(theGrid)));
 	//j = theGrid->rows;
@@ -116,14 +116,14 @@ Grid* ReadWorld(const char* filename){
 	
 	for(i=0;i<theGrid->rows;i++)
 	{
-		theGrid->data[i] = (char*)malloc(sizeof(char)*theGrid->cols);
+		theGrid->data[i] = new char[theGrid->cols+3];
 		//printf("%s",theGrid->data[i]);
 		//printf("Data at i: %s Loop i: %d \n",theGrid->data[i], i);
 	}
 	
 	for (i=0;i<theGrid->rows;i++)
 	{
-		fgets(theGrid->data[i], theGrid->cols+2, filey);
+		fgets(theGrid->data[i], theGrid->cols+3, filey);
 	}
 
 	fclose(filey);
@@ -134,7 +134,7 @@ Grid* ReadWorld(const char* filename){
 Search* FindPath(Grid* g){
 	Queue *q = new Queue();
 	//printf("1\n");
-	Search* se=(Search*)malloc(sizeof(Search));
+	Search* se = new Search;
 	//printf("2\n");
 	se->s=new Stack();
 	//printf("3\n");
@@ -142,7 +142,9 @@ Search* FindPath(Grid* g){
 	//printf("4\n");
 	int i=0, j=0, rows = g->rows, cols = g->cols;
 	
-	se->ParentR=(int**)malloc(sizeof(int*)*rows);
+	se->ParentR = new int*[rows];
+	se->ParentC = new int*[rows];
+	se->Distance= new int*[rows];
 	//printf("5\n");
 	
 	//printf("Here\n");
@@ -151,84 +153,39 @@ Search* FindPath(Grid* g){
 	
 	//system.end(0);
 	
+	i=0, j=0;
+	int startR, startC, goalR, goalC;
 	for(i=0;i<rows;i++)
 	{
-		//break;
-		//printf("Rows %d\n", rows);
-		
-		//system("sleep(1000)");
-		//printf("%d\n",i);
-		se->ParentR[i]=(int*)malloc(sizeof(int)*cols);
-		//printf("6\n");
-		//cant access i=1...n
-	}
-	//printf("Here\n");
-	for(i=0;i<rows;i++)
-	{
+		se->ParentR[i] = new int[cols];
+		se->ParentC[i] = new int[cols];
+		se->Distance[i]= new int[cols];
+
 		for(j=0;j<cols;j++)
 		{	
-			//printf ("test i: %d j: %d\n",i,j);
-			//se->ParentR[1][1]=-2;
-			se->ParentR[i][j]=-2;
-		}
-	}
-	//printf("working here...");
-	se->ParentC=(int**)malloc(sizeof(int*)*rows);
-	//printf("7\n");
-	for(i=0;i<rows;i++)
-	{
-		se->ParentC[i]=(int*)malloc(sizeof(int)*cols);
-		//printf("8\n");
-	}
-	for(i=0;i<rows;i++)
-	{
-		for(j=0;j<cols;j++)
-		{
-			//printf("%d\n",i);
-			se->ParentC[i][j]=-2;
-		}
-	}
-	//printf("Test\n");
-	se->Distance=(int**)malloc(sizeof(int*)*rows);
-	//printf("9\n");
-	
-	for(i=0;i<rows;i++)
-	{
-		se->Distance[i]=(int*)malloc(sizeof(int)*cols);
-		//printf("10\n");
-		
-	}
-	
-	for(i=0;i<rows;i++)
-	{
-		for(j=0;j<cols;j++)
-		{
-			se->Distance[i][j]=MAX_INT;
-		}
-	}
-	
-	i=0, j=0;
-	int startR, startC;
-	for(i=0;i<rows;i++)
-	{
-		for(j=0;j<cols;j++)
-		{
-			if(g->data[i][j]=='S')
+			se->ParentR[i][j] = -2;
+			se->ParentC[i][j] = -2;
+			
+			se->Distance[i][j] = MAX_INT;
+			
+			if(g->data[i][j] == 'S')
 			{
 				startR=i;
 				startC=j;
-				break;
+			}else if(g->data[i][j] == 'G'){
+				goalR = i;
+				goalC = j;
+				g->data[i][j] = ' ';
 			}
+
 		}
 	}
 	
 	se->Distance[startR][startC]=0;
 	se->ParentR[startR][startC]=-1;
 	se->ParentC[startR][startC]=-1;
-	//printf("Rows: %d Cols: %d\n",rows,cols);
-	//*q = enqueue(*startR, *startC);
+
 	q->enqueue(startR, startC);
-	
 	int currR, currC;
 			//printf("hello\n");
 	currR = startR;
@@ -236,11 +193,11 @@ Search* FindPath(Grid* g){
 	//printf("Rows: %d Cols: %d\n",rows,cols);
 	//printf("queue size: %d\n",q->size());
 			//printf("hello\n");
-	while((q->size())!=0 && g->data[currR][currC]!='G')
+	while((q->size())!=0 && !(currR == goalR && currC == goalC))
 	{
 
 		//printf("Rows: %d Cols: %d\n",rows,cols);
-		q->enqueue(currR, currC);
+		q->dequeue(currR, currC);
 		
 		//up
 		if(g->data[currR-1][currC]==' ' && se->ParentR[currR-1][currC]==-2 && se->ParentC[currR-1][currC]==-2)
@@ -289,17 +246,14 @@ Search* FindPath(Grid* g){
 		se->Length=se->Distance[currR][currC];
 		se->s->push(currR, currC);
 		//se->s->
-		do
+		while(currR != -1 && currC != -1)
 		{
-			if(currR!=-1 && currC!=-1)
-			{
-				se->s->push(se->ParentR[currR][currC], se->ParentC[currR][currC]);
-			}
+			se->s->push(se->ParentR[currR][currC], se->ParentC[currR][currC]);
 			int tempR = currR, tempC=currC;
 			currR=se->ParentR[tempR][tempC];
 			currC=se->ParentC[tempR][tempC];	
-		}while(currR!=startR || currC!=startC);
-		
+		}		
+		se->s->pop(currR, currC);
 		return se;
 	}
 }
