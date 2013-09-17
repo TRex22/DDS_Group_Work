@@ -283,5 +283,4 @@ int PowerFn (int no, int power)
 	return ans;
 }
 
-/* --------------GRAPHICS FUNCTIONS------------------- */
 

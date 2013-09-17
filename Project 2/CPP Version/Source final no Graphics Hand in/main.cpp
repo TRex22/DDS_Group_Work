@@ -354,17 +354,13 @@ int main(){
     read_check();
     path_check1();
     path_check2();
-	//add graphics stuff here
-	cout << "\nPress Any Key to Continue...." << endl;
-	getchar();
-	
 	
 	
 	//end and free stuff
 	std::cout.flush();
 	free(stdin);
 	free(stdout);
-	cout << "\nPress Any Key to Exit...." << endl;
+	//cout << "\nPress Any Key to Exit...." << endl;
 	getchar();
 	//system("pause");
     return 0;
