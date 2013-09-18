@@ -1,0 +1,42 @@
+# Project: Project2CPP
+# Makefile created by Dev-C++ 5.3.0.4
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+RES      = Project2CPP_private.res
+OBJ      = LinkList.o main.o source.o guicon.o $(RES)
+LINKOBJ  = LinkList.o main.o source.o guicon.o $(RES)
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -L"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/lib" -static-libstdc++ -static-libgcc -static-libgcc -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -L"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/lib" -mwindows -static-libgcc -lmingw32 -lSDLmain -lSDL  -pg -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/include" -I"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/include" -I"C:/Users/Jason/Dropbox/Work/WITS/Year 1/Coms1000/DDS/Projects/Group_Work/DDS_Group_Work/Project 2/CPP Version/Graphics Final Solution/SDL-1.2.15/include"
+BIN      = Project2CPP.exe
+CXXFLAGS = $(CXXINCS) -static-libgcc -pg -g3
+CFLAGS   = $(INCS) -static-libgcc -pg -g3
+RM       = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+LinkList.o: LinkList.cpp
+	$(CPP) -c LinkList.cpp -o LinkList.o $(CXXFLAGS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+source.o: source.cpp
+	$(CPP) -c source.cpp -o source.o $(CXXFLAGS)
+
+guicon.o: guicon.cpp
+	$(CPP) -c guicon.cpp -o guicon.o $(CXXFLAGS)
+
+Project2CPP_private.res: Project2CPP_private.rc 
+	$(WINDRES) -i Project2CPP_private.rc --input-format=rc -o Project2CPP_private.res -O coff 

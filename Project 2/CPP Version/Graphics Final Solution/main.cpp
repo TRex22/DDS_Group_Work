@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//#include <time.h>
+
 #include <iostream>
 #include <iomanip>
 
@@ -8,8 +10,37 @@
 #include "Stack.h"
 #include "Queue.h"
 
-#include "Grid.h"
+//#include <SDL/SDL.h>
+#include "SDL/SDL.h"
+//#include "SDL-1.2.15/include/SDL/SDL.h"
+//#include "GraphicsSDL.h"
 
+//see http://dslweb.nwnexus.com/~ast/dload/guicon.htm
+#include "guicon.h"
+//#include <windows.h>
+#include <fstream>
+#include <conio.h>
+//#include <crtdbg.h>
+
+
+#define WALL 'x'
+#define FreeSpace ' '
+#define Goal 'G'
+#define Start 'S'
+
+#define TRUE 1
+#define FALSE 0
+
+#include "Grid.h"
+#ifdef _WIN32
+	#define windows TRUE
+	#include <windows.h>
+#else
+	#define windows FALSE
+#endif
+//void Delay();
+#include "source.h"
+//#define sleepy = new Sleep(1000L);
 using namespace std;
 
 int counter;
@@ -346,8 +377,76 @@ void path_check2(){
     assert_i(correct_dist, 1, "Distance Array - World2");
 }
 
-int main(){
-    ll_check();
+int main(int argc, char* args[]){
+	
+	int SCREEN_WIDTH, SCREEN_HEIGHT, noRect;
+	//only using world1.txt and world2.txt 0.78 is the mean diff between row:col ratios
+	SCREEN_WIDTH = (400)*0.78;
+	SCREEN_HEIGHT = (400)*0.78;
+	
+	int rectH1, rectW1, rectH2, rectW2;
+	
+	Grid *GridWorld1;
+	GridWorld1 = ReadWorld("world1.txt");
+		    	
+	Grid *GridWorld2;
+	GridWorld2 = ReadWorld("world2.txt");
+	
+	rectW1 = GridWorld1->cols;
+	rectH1 = GridWorld1->rows;
+	    
+	rectW2 = GridWorld2->cols;
+	rectH2 = GridWorld2->rows;
+	
+	
+	SDL_Rect Rect;
+	SDL_Surface* screen;
+	SDL_Event event;
+	    
+    if (windows == TRUE)
+    {
+		//SDL INIT STUFF
+	    
+		
+		
+	    
+		//Uint32 flags = SDL_SWSURFACE|SDL_FULLSCREEN|SDL_DOUBLEBUF;
+		SDL_Init( SDL_INIT_EVERYTHING ); 
+		RedirectIOToConsole();
+		
+		freopen("CON", "wt", stdout); //enable console output
+		screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE|SDL_DOUBLEBUF|SDL_ASYNCBLIT );
+		//This will not draw directly to the sceen. You must call flip to actually see the results of the drawing
+		//caption = "First World!\0";
+		SDL_WM_SetCaption ("Find!!", NULL);
+		
+		SDL_PollEvent (&event);
+		switch (event.type)
+			{
+				case SDL_QUIT:
+					exit(0);
+					break;
+				case SDL_KEYDOWN:
+			        printf( "Key press detected\n" );
+			        exit(0);
+			        break;
+		
+		      	case SDL_KEYUP:
+			        printf( "Key release detected\n" );
+			        exit(0);
+			        break;
+			    
+			    case SDLK_KP_ENTER:
+			    	printf( "Keypad Enter Detected\n" );
+			    	//getchar();
+					exit(0);
+			    	break;
+					
+				//case 
+			}
+	}
+	
+	ll_check();
     stack_check();
     queue_check();
 
@@ -355,17 +454,75 @@ int main(){
     path_check1();
     path_check2();
 	//add graphics stuff here
-	cout << "\nPress Any Key to Continue...." << endl;
-	getchar();
+	//cout << "\nPress Any Key to Continue...." << endl;
+	//getchar();
+	//system("cls");
 	
-	
-	
-	//end and free stuff
-	std::cout.flush();
-	free(stdin);
-	free(stdout);
-	cout << "\nPress Any Key to Exit...." << endl;
-	getchar();
+	//printf ("hello\n");
 	//system("pause");
+	//cout << "World <1> or World <2> ?"<<endl;
+	//printf("World <1> or World <2> ?\n");
+	//char choice;// = getchar();
+	//scanf("%d", &choice);
+	//int replay = TRUE;
+	//while (replay)
+	if (windows == TRUE)
+    {
+		{
+			//Delay = new delay();
+			//delay();
+			delay();
+			//system("cls");
+			printf("Running World 1...\n\n");
+			//sleepy;
+			//if (choice == '1')
+			{
+				int i, j;
+		    	
+		    
+		    	Search *s1;
+		    	s1 = DrawPath(GridWorld1, rectH1, rectW1, screen, Rect);
+			}
+			//else if (choice == '2')
+			delay();
+			SDL_FreeSurface(screen);
+			
+			
+			//system("cls");
+			printf("Running World 2...\n\n");
+			{
+				int i, j;
+		    	
+		    
+		    	Search *s2;
+		    	s2 = DrawPath(GridWorld2, rectH2, rectW2, screen, Rect);
+			}
+			//else
+			{
+				//cout << "\n\nError Wrong Choice\n"<<endl;
+				//printf("\n\nError Wrong Choice\n");
+				//replay = FALSE;
+			}
+			//scanf("%d", &choice);
+		}
+	}
+	//cout <<"  Choice: " << choice << endl;
+	//end and free stuff
+	
+	//free(stdin);
+	//free(stdout);
+	//cout << "\nPress Any Key to Exit...." << endl;
+	//getchar();
+	//system("cls");
+	atexit(SDL_Quit);
+	std::cout.flush();
+	printf("\n\nPress Any key to exit...\n\n");
+	getchar();
     return 0;
 }
+/*void Delay(){
+   //long i = 0;
+    //for(i = 0; i < 1000000L;i++); 
+    Sleep(1000);
+
+}*/

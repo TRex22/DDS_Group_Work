@@ -4,16 +4,16 @@ Name=Project2CPP
 Type=0
 Ver=2
 ObjFiles=
-Includes=
-Libs=
-PrivateResource=
+Includes="C:\Users\Jason\Dropbox\Work\WITS\Year 1\Coms1000\DDS\Projects\Group_Work\DDS_Group_Work\Project 2\CPP Version\Graphics Final Solution\SDL-1.2.15\include"
+Libs="C:\Users\Jason\Dropbox\Work\WITS\Year 1\Coms1000\DDS\Projects\Group_Work\DDS_Group_Work\Project 2\CPP Version\Graphics Final Solution\SDL-1.2.15\lib"
+PrivateResource=Project2CPP_private.rc
 ResourceIncludes=
 MakeIncludes=
 Compiler=-static-libgcc_@@_
 CppCompiler=-static-libgcc_@@_
-Linker=-static-libgcc_@@_
+Linker=-static-libgcc -lmingw32 -lSDLmain -lSDL_@@_
 IsCpp=1
-Icon=
+Icon=Project2CPP.ico
 ExeOutput=
 ObjectOutput=
 LogOutput=
@@ -23,13 +23,13 @@ OverrideOutputName=Project2CPP.exe
 HostApplication=
 Folders=
 CommandLine=
-UseCustomMakefile=1
+UseCustomMakefile=0
 CustomMakefile=makefile
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000000000000001000000
-UnitCount=11
+CompilerSettings=0000000000000000101000000
+UnitCount=15
 
 [VersionInfo]
 Major=1
@@ -119,17 +119,45 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit8]
-FileName=source_old.c
+[Unit9]
+FileName=world1.txt
 CompileCpp=1
+Folder=Project2CPP
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit10]
+FileName=world2.txt
+Folder=Project2CPP
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit11]
+FileName=SDL.dll
+Folder=Project2CPP
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=1
+BuildCmd=<override this command>
+
+[Unit12]
+FileName=SDL\SDL.h
 Folder=Project2CPP
 Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+CompileCpp=1
 
-[Unit9]
+[Unit8]
 FileName=Stack.h
 CompileCpp=1
 Folder=Project2CPP
@@ -139,20 +167,32 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit10]
-FileName=world1.txt
-Folder=Project2CPP
-Compile=0
-Link=0
+[Unit14]
+FileName=guicon.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit11]
-FileName=world2.txt
-Folder=Project2CPP
-Compile=0
-Link=0
+[Unit15]
+FileName=source.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=guicon.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
