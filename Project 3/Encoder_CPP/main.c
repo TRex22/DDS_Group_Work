@@ -216,6 +216,9 @@ void pq_print_freq(PQueue *p){
 /********************** YOUR CODE HERE ***************************************/
 
 int main(){
-
-
+	char input[255];
+	fgets(line, 255, stdin);
+	
+	PQueue* pq=pq_init();
+	
 }
