@@ -1,227 +1,212 @@
+/*Jason Chalom 711985 and Ariel Rosenfeld 2013*/
+
 #include <iostream>
 #include <cstdio>
 
-#define MAX_LENGTH 255
-#define MAX_UNIQUE_CHARS 128
-
-//#include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
+#include <string>
+#include <math.h>
 
 using namespace std;
 
-/************************ Tree Headers ***************************************/
-// Tree Nodes
-struct TreeNode{
-    int freq;
-    char c;
-
-    struct _TreeNode *left;
-    struct _TreeNode *right;
+struct FreqQueue
+{
+  char character;
+  int frequency;
+  FreqQueue *next;
 };
-//typedef struct _TreeNode TreeNode;
 
-// Tree Wrapper
-struct Tree{
-    TreeNode *root;
-};
-//typedef struct _Tree Tree;
-
-// TreeNode create a new node in the tree with relevant frequency and char
-TreeNode* tn_init(int freq, char c);
-
-// Print a tree node in a pre-order traversal
-//   Root[left traversal][right traversal]
-void tn_print(TreeNode *t);
-
-// Create a new Tree with a single root node
-Tree* tree_init(int freq, char c);
-
-// Take 2 trees and merge them as the left and right children of a new node
-Tree* tree_merge(Tree *left, Tree *right);
-
-// Print a tree using a pre-order traversal
-void tree_print(Tree *t);
-
-/************************ Tree Functions ***************************************/
-// TreeNode create a new node in the tree with relevant frequency and char
-TreeNode* tn_init(int freq, char c){
-    TreeNode *tn = (TreeNode*) malloc(sizeof(TreeNode));
-    tn->freq = freq;
-    tn->c    = c;
-
-    tn->left = NULL;
-    tn->right = NULL;
-    return tn;
+//init FreqQueue
+FreqQueue *initFreq(char character)
+{
+  FreqQueue *FQ = new FreqQueue();
+  FQ -> character = character;
+  FQ -> frequency = 1; 
+  FQ -> next = NULL;
+  
+  return FQ;
 }
 
-// Print a tree node in a pre-order traversal
-//   Root[left traversal][right traversal]
-void tn_print(TreeNode *t){
-    if(t->left == NULL || t->right == NULL){
-        printf("'%c'(%d)", t->c, t->freq);
-    }else{
-        printf("%d[", t->freq);
-        tn_print(t->left);
-        printf("][");
-        tn_print(t->right);
-        printf("]");
+void traverseData(FreqQueue *FQ)
+{
+  FreqQueue *trav = FQ;
+  cout << "\n" << "Will print out data structure sequentially from root." << endl;
+  cout << "Character: " << trav->character << " |frequency: " << trav->frequency << endl;
+  while(trav->next != NULL)
+    {
+      cout << "Character: " << trav->character << " |frequency: " << trav->frequency << endl;
+      trav = trav->next;
     }
 }
-// Create a new Tree with a single root node
-Tree* tree_init(int freq, char c){
-    Tree *t = (Tree*) malloc(sizeof(Tree));
-    t->root = tn_init(freq, c);
-    return t;
-}
 
-// Take 2 trees and merge them as the left and right children of a new node
-Tree* tree_merge(Tree *left, Tree *right){
-    Tree *t = tree_init(left->root->freq + right->root->freq, '\0');
-    
-    t->root->left  = left->root;
-    t->root->right = right->root;
-
-    // Just free the old tree dummy heads, not the actual trees
-    free(left);
-    free(right);
-
-    return t;
-}
-
-// Print a tree using a pre-order traversal
-void tree_print(Tree *t){
-    if(t->root == NULL) return;
-
-    tn_print(t->root);
-}
-
-/****************** Priority Queue Headers ****************************************************/
-/**
- * Richard Klein (2013)
- *
- * Priority Queue Implementation based on Arrays.
- *
- * Note that this is not an optimal strategy. Binary Heaps are better in most circumstances.
- *
- * The priority queue works by keeping a sorted array.
- * Each insertion is done by searching for the correct index and then shifting all 
- *      elements to the right by one. Best and Worst case for a single insertion are both Θ(n).
- *      We need i comparisons to discover that we insert at index i.
- *      We then need to move n-i numbers to the right to make space. 
- *      
- * Deletion is done at the back and requires that we only adjust the size variable. This takes Θ(1).
- */
-
-// Priority Queue Structure
-struct _PQueue{
-    int size;
-    int capacity;
-    int*  priority;
-    Tree** data;
-
-};
-typedef struct _PQueue PQueue;
-
-// Create a new empty priority queue
-PQueue* pq_init();
-
-// Insert an item into the queue in the correct place so that elements are ordered by priority
-void pq_enqueue(PQueue *p, Tree *t, int priority);
-
-// Remove the item with the lowest priority
-Tree* pq_dequeue(PQueue *p);
-
-// Print all the trees stored in the priority queue.
-// Use tree_print to print each item.
-void pq_print(PQueue *p);
-
-// Print all the characters in the roots stored in the priority queue.
-void pq_print_chars(PQueue *p);
-
-// Print all the frequencies in the roots stored in the priority queue.
-void pq_print_freq(PQueue *p);
-
-/****************** Priority Queue Implementations ****************************************************/
-// Create a new empty priority queue
-PQueue* pq_init(){
-    PQueue *p = (PQueue*) malloc(sizeof(PQueue));
-
-    p->data = (Tree**) malloc(sizeof(Tree*)*MAX_UNIQUE_CHARS);
-    p->priority = (int*) malloc(sizeof(int)*MAX_UNIQUE_CHARS);
-    if(p->data == NULL || p->priority == NULL){
-        printf("Memory Allocation failed.\n");
-        exit(1);
-    }
-    p->size = 0;
-    p->capacity = MAX_UNIQUE_CHARS;
-
-    return p;
-}
-
-// Insert an item into the queue in the correct place so that elements are ordered by priority
-void pq_enqueue(PQueue *p, Tree *t, int priority){
-    int i = 0;
-    while(i < p->size && priority < p->priority[i])
-        i++;
-
-    while(i < p->size && priority == p->priority[i] && t->root->c > p->data[i]->root->c)
-        i++;
-
-    int j;
-    for(j = p->size; j >= i; j--){
-        p->data[j] = p->data[j-1];
-        p->priority[j] = p->priority[j-1];
+//find in queue then return node or NULL
+FreqQueue *SearchQueue(FreqQueue *FQ, char character)
+{
+  if(FQ == NULL)
+    {
+      return NULL;
     }
 
-    p->priority[i] = priority;
-    p->data[i] = t;
-    p->size++;
-}
-
-// Remove the item with the lowest priority
-Tree* pq_dequeue(PQueue *p){
-    if(p->size == 0) return NULL;
-
-    p->size--;
-
-    Tree *t = p->data[p->size];
-    p->data[p->size] = NULL;
-
-    return t;
-}
-
-// Print all the trees stored in the priority queue.
-// Use tree_print to print each item.
-void pq_print(PQueue *p){
-    int i;
-    for(i = p->size -1; i >= 0; i--){
-        tree_print(p->data[i]);
-        printf(", ");
+  //FreqQueue *trav = FQ;
+  if (character == FQ->character)
+    {
+      return FQ;
     }
-    printf("\n");
-}
-
-// Print all the characters in the roots stored in the priority queue.
-void pq_print_chars(PQueue *p){
-    int i;
-    for(i = p->size -1; i > 0; i--){
-        printf("%c ", p->data[i]->root->c);
+ else if (FQ->next != NULL && character != FQ->character)
+    {
+      SearchQueue(FQ->next, character);
     }
-    printf("%c\n", p->data[i]->root->c);
-}
-// Print all the frequencies in the roots stored in the priority queue.
-void pq_print_freq(PQueue *p){
-    int i;
-    for(i = p->size -1; i > 0; i--){
-        printf("%d ", p->data[i]->root->freq);
+  else //if(trav->next == NULL && character != trav->character)
+    {
+      return NULL;
     }
-    printf("%d\n", p->data[i]->root->freq);
+ 
 }
 
-/********************** YOUR CODE HERE ***************************************/
+//enqueue
+void enqueue(FreqQueue *FQ, char character)
+{
+  FreqQueue *trav = FQ;
+  FreqQueue *node = new FreqQueue();
+  //FQ = new FreqQueue();
+  node -> character = character;
+  node -> frequency = 1;
+  node -> next = NULL;
+  //FQ = node
+  while(trav->next != NULL)
+    {
+      trav = trav->next;
+    }
+  trav->next = node;
 
-int main(){
+  //traverseData(FQ);
+}
 
+//dequeue
+//not needed for now
+void delNode(FreqQueue *FQ, FreqQueue *node)
+{
+  FreqQueue *trav = FQ;
+  if(FQ == node)
+    {      
+      FreqQueue *tmp = FQ;
+      FQ = FQ -> next;
+      free(tmp);
+    }
+  else if (trav->next == node)
+    {
+      FreqQueue *parent = trav;
+      trav = trav->next;
+      parent -> next = trav -> next;
+      free(trav);
+    }
+ else
+   {
+      while(trav->next != node)
+	{
+	  trav = trav->next;
+	}
+      delNode(trav, node);
+      /*      
+	      FreqQueue *parent = trav;
+	      trav = trav->next;
+      
+	      parent -> next = trav -> next;
+	      free (trav);
+      */
+    }
+}
 
+//min Sort queue
+void minSort (FreqQueue *FQ)
+{
+  //traverse
+  FreqQueue *trav = FQ;
+  FreqQueue *minNode = FQ;
+  FreqQueue *tmp = FQ;
+  //FreqQueue *tmp2 = FQ;
+
+  while (trav->next != NULL)
+    {
+      if(trav->next->frequency < minNode -> frequency)
+	{
+	  if (minNode == FQ)
+	    {
+	      tmp = minNode;
+	      minNode -> character = trav->next->character;
+	      minNode -> frequency = trav->next->frequency;
+	      trav -> next -> character = tmp -> character;
+	      trav -> next -> frequency = tmp -> frequency;
+	    }
+	}
+      trav = trav->next;
+    }
+
+  trav = FQ;
+  if (trav -> next != NULL)
+    {
+      minSort (trav -> next);
+    }
+
+  free(tmp);
+}
+
+int main()
+{
+  //get input
+  int OriginalBits;
+  string input;
+  //cin >> input;
+  getline(cin, input);
+  FreqQueue *FQ = new FreqQueue();//initFreq(input[0]);
+ 
+  //cout << "\n: " << input[1]<<endl;
+  
+  if (!input.empty())
+    {
+      //i starts at 1;
+      //input[i]
+      FQ -> character = input.at(0);
+      FQ -> frequency = 1;
+      FQ -> next = NULL;
+      OriginalBits = 2; //one for first char and one for \0
+
+      FreqQueue *SQ = FQ;// = new FreqQueue();
+      for(int i = 1; input[i] != '\0'; i++)
+	//for(int i = 1; i != input.end(); i++)
+	{
+	  cout<<input[i]<<endl;
+	  SQ = SearchQueue(FQ, input.at(i));
+	  if(input.at(i) != '\0')
+	    {
+	      if(SQ != NULL)
+		{
+		  //increase frequency
+		  SQ -> frequency ++;
+		}
+	      else
+		{
+		  enqueue (FQ, input[i]);
+		}
+	    }
+	  OriginalBits ++;
+	}
+      //figure out original bits
+      OriginalBits *= 8;
+      //cout << "\nOriginal bits: "<<OriginalBits<<endl;
+      //now sort the frequency queue
+
+      //run a check
+      traverseData(FQ);
+
+      minSort(FQ);
+
+      traverseData(FQ);
+    }
+  else
+    {
+      //cheerz
+    }
+  
+  return 0;
 }
