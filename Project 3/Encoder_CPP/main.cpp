@@ -1,4 +1,5 @@
 /*Jason Chalom 711985 and Ariel Rosenfeld 2013*/
+/*Some code is Richard's*/
 
 #include <iostream>
 #include <cstdio>
@@ -8,6 +9,20 @@
 #include <math.h>
 
 using namespace std;
+
+struct TreeNode
+{
+	char character;
+	int frequency;
+	
+	struct Tree *left;
+	struct Tree *right;
+};
+
+struct Tree
+{
+    TreeNode *root;
+};
 
 struct FreqQueue
 {
@@ -160,6 +175,26 @@ void minSort (FreqQueue *FQ)
 
   free(tmp);
 }
+/*some tree code is Richard's*/
+
+Tree* tree_init(int freq, char c){
+    Tree *t = (Tree*) malloc(sizeof(Tree));
+    t->root = tn_init(freq, c);
+    return t;
+}
+
+Tree* tree_merge(Tree *left, Tree *right){
+    Tree *t = tree_init(left->root->freq + right->root->freq, '\0');
+    
+    t->root->left  = left->root;
+    t->root->right = right->root;
+
+    // Just free the old tree dummy heads, not the actual trees
+    free(left);
+    free(right);
+
+    return t;
+}
 
 int main()
 {
@@ -214,7 +249,7 @@ int main()
 
       traverseData(FQ);
 
-      //
+      //actual tree merging stuff here
     }
   else
     {
