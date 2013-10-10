@@ -66,20 +66,30 @@ FreqQueue *SearchQueue(FreqQueue *FQ, char character)
 //enqueue
 void enqueue(FreqQueue *FQ, char character)
 {
-  FreqQueue *trav = FQ;
-  FreqQueue *node = new FreqQueue();
-  //FQ = new FreqQueue();
-  node -> character = character;
-  node -> frequency = 1;
-  node -> next = NULL;
-  //FQ = node
-  while(trav->next != NULL)
+  if(FQ == NULL)
     {
-      trav = trav->next;
+      FQ = new FreqQueue();
+      FQ -> character = character;
+      FQ -> frequency = 1;
+      FQ -> next = NULL;
     }
-  trav->next = node;
+  else
+    {
+      FreqQueue *trav = FQ;
+      FreqQueue *node = new FreqQueue();
+      //FQ = new FreqQueue();
+      node -> character = character;
+      node -> frequency = 1;
+      node -> next = NULL;
+      //FQ = node
+      while(trav->next != NULL)
+	{
+	  trav = trav->next;
+	}
+      trav->next = node;
 
-  //traverseData(FQ);
+      //traverseData(FQ);
+    }
 }
 
 //dequeue
@@ -128,9 +138,9 @@ void minSort (FreqQueue *FQ)
 
   while (trav->next != NULL)
     {
-      if(trav->next->frequency < minNode -> frequency)
+      if(trav->next->frequency < minNode -> frequency)// && trav->next->frequency > 0)
 	{
-	  if (minNode == FQ)
+	  //if (minNode == FQ)
 	    {
 	      tmp = minNode;
 	      minNode -> character = trav->next->character;
@@ -169,6 +179,7 @@ int main()
       FQ -> character = input.at(0);
       FQ -> frequency = 1;
       FQ -> next = NULL;
+      //FQ = NULL;
       OriginalBits = 2; //one for first char and one for \0
 
       FreqQueue *SQ = FQ;// = new FreqQueue();
@@ -202,6 +213,8 @@ int main()
       minSort(FQ);
 
       traverseData(FQ);
+
+      //
     }
   else
     {
