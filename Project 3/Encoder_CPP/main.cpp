@@ -12,16 +12,16 @@ using namespace std;
 
 struct TreeNode
 {
-	char character;
-	int frequency;
+  char character;
+  int frequency;
 	
-	struct Tree *left;
-	struct Tree *right;
+  struct Tree *left;
+  struct Tree *right;
 };
 
 struct Tree
 {
-    TreeNode *root;
+  TreeNode *root;
 };
 
 struct FreqQueue
@@ -67,7 +67,7 @@ FreqQueue *SearchQueue(FreqQueue *FQ, char character)
     {
       return FQ;
     }
- else if (FQ->next != NULL && character != FQ->character)
+  else if (FQ->next != NULL && character != FQ->character)
     {
       SearchQueue(FQ->next, character);
     }
@@ -125,8 +125,8 @@ void delNode(FreqQueue *FQ, FreqQueue *node)
       parent -> next = trav -> next;
       free(trav);
     }
- else
-   {
+  else
+    {
       while(trav->next != node)
 	{
 	  trav = trav->next;
@@ -156,13 +156,13 @@ void minSort (FreqQueue *FQ)
       if(trav->next->frequency < minNode -> frequency)// && trav->next->frequency > 0)
 	{
 	  //if (minNode == FQ)
-	    {
-	      tmp = minNode;
-	      minNode -> character = trav->next->character;
-	      minNode -> frequency = trav->next->frequency;
-	      trav -> next -> character = tmp -> character;
-	      trav -> next -> frequency = tmp -> frequency;
-	    }
+	  {
+	    tmp = minNode;
+	    minNode -> character = trav->next->character;
+	    minNode -> frequency = trav->next->frequency;
+	    trav -> next -> character = tmp -> character;
+	    trav -> next -> frequency = tmp -> frequency;
+	  }
 	}
       trav = trav->next;
     }
@@ -175,25 +175,36 @@ void minSort (FreqQueue *FQ)
 
   free(tmp);
 }
-/*some tree code is Richard's*/
+
+/*some tree code is Richard's:*/
+
+TreeNode* tn_init(int freq, char c){
+  TreeNode *tn = new TreeNode();
+  tn->frequency = freq;
+  tn->character = c;
+
+  tn->left = NULL;
+  tn->right = NULL;
+  return tn;
+}
 
 Tree* tree_init(int freq, char c){
-    Tree *t = (Tree*) malloc(sizeof(Tree));
-    t->root = tn_init(freq, c);
-    return t;
+  Tree *t = (Tree*) malloc(sizeof(Tree));
+  t->root = tn_init(freq, c);
+  return t;
 }
 
 Tree* tree_merge(Tree *left, Tree *right){
-    Tree *t = tree_init(left->root->freq + right->root->freq, '\0');
+  Tree *t = tree_init(left->root->frequency + right->root->frequency, '\0');
     
-    t->root->left  = left->root;
-    t->root->right = right->root;
+  t->root->left  = left->root;
+  t->root->right = right->root;
 
-    // Just free the old tree dummy heads, not the actual trees
-    free(left);
-    free(right);
+  // Just free the old tree dummy heads, not the actual trees
+  free(left);
+  free(right);
 
-    return t;
+  return t;
 }
 
 int main()
@@ -247,7 +258,11 @@ int main()
 
       minSort(FQ);
 
+      //run a check
       traverseData(FQ);
+
+      //now create a string which will contain a linear version of the binary tree which will then be created later.
+
 
       //actual tree merging stuff here
     }
