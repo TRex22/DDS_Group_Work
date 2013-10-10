@@ -13,6 +13,26 @@
 
 using namespace std;
 
+struct EncodedChar
+{
+  string code;
+  struct EncodedChar *next;
+};
+
+void AddEncChar(EncodedChar *EC, string code)
+{
+  EncodedChar *trav = EC;
+
+  while(trav != NULL)
+    {
+      trav = trav->next;
+    }
+  EncodedChar *node = new EncodedChar();
+  node -> code = code;
+  node -> next = NULL;
+  trav->next = node;
+}
+
 struct TreeNode
 {
   char character;
@@ -346,11 +366,44 @@ void pq_print_freq(PQueue *p){
     printf("%d\n", p->data[i]->root->frequency);
 }
 
+void Traversal(TreeNode *t, char **enc, string code)
+{
+  //string code = "t";
+  //code = "";
+
+  if (t->left !=NULL)
+    {
+      code = code+'0';
+      Traversal(t->left, enc, code);
+      //cout<<"\nLeft: "+code<<endl;
+    }
+
+  if (t->right != NULL) 
+    {
+      //cout<< "Code before: "<<code<<endl;
+
+      //always go back one when going right so delete 1 left
+      //code.erase(code.end()-1, code.end());
+      //cout<< "Code after: "<<code<<endl;
+      code = code+'1';
+      Traversal(t->right, enc, code);
+      //cout<<"\nRight: "+code<<endl;
+    }
+
+  if((t->right == NULL) && (t->left == NULL))
+    {
+      //enc[t->character] = (char*)malloc(256*sizeof(char));
+      //cout << code+" char: "<<t->character << endl;
+      enc[t->character] = (char*)code.c_str();
+      code = "";
+    }
+}
 
 int main()
 {
     //get input
     int OriginalBits;
+    int CodedBits;
     string input;
     //cin >> input;
     getline(cin, input);
@@ -372,7 +425,7 @@ int main()
         for(int i = 1; input[i] != '\0'; i++)
             //for(int i = 1; i != input.end(); i++)
         {
-            cout<<input[i]<<endl;
+	  //cout<<input[i]<<endl;
             SQ = SearchQueue(FQ, input.at(i));
             if(input.at(i) != '\0')
             {
@@ -394,7 +447,7 @@ int main()
         //now sort the frequency queue
 
         //run a check
-        traverseData(FQ);
+        //traverseData(FQ);
 
         PQueue *p = pq_init();
         Tree *t;
@@ -420,24 +473,33 @@ int main()
         }
 
         t = pq_dequeue(p);
-        tree_print(t);
-
+        //tree_print(t);
+	
         //minSort(FQ);
 
         ////run a check
-        traverseData(FQ);
+        //traverseData(FQ);
 
-        ////now create a string which will contain a linear version of the binary tree which will then be created later.
-        ////string BSTlist;
-        //FreqQueue *node1;
-        //FreqQueue *node2;
-
-        ////pop two off priority queue
-        //node1=dequeue(FQ);
-        //node2=dequeue(FQ);
-
-
-        //actual tree merging stuff here
+	//run the traversal and get stuff
+	char **enc = (char**)malloc(256*sizeof(char*));
+	string code = "";
+	Traversal(t->root, enc, code);
+	CodedBits = 0;
+	string encode = "";
+	for (int j = 0; j< input.length(); j++)
+	  {
+	    //cout<<enc[input[j]]<<endl;
+	    encode = encode + enc[input[j]];
+	    //CodedBits += enc[input[j]].length();
+	  }
+	cout<<encode<<endl;
+	cout<<"\ny: "<<enc['y']<<endl;
+	CodedBits = encode.length();
+	//cout<<endl;
+	//cout << "\n" << enc['y']<<endl;
+	
+        cout << "Total Bits (Original):" <<OriginalBits<<endl;
+	cout << "Total Bits (Coded):"<<CodedBits <<endl;
     }
     else
     {
