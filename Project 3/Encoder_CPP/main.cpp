@@ -142,6 +142,13 @@ void delNode(FreqQueue *FQ, FreqQueue *node)
     }
 }
 
+FreqQueue *dequeue(FreqQueue *FQ)
+{
+  FreqQueue *head = FQ;
+  FQ = FQ->next;
+  return head;
+}
+
 //min Sort queue
 void minSort (FreqQueue *FQ)
 {
@@ -262,8 +269,15 @@ int main()
       traverseData(FQ);
 
       //now create a string which will contain a linear version of the binary tree which will then be created later.
+      //string BSTlist;
+      FreqQueue *node1;
+      FreqQueue *node2;
 
+      //pop two off priority queue
+      node1=dequeue(FQ);
+      node2=dequeue(FQ);
 
+      
       //actual tree merging stuff here
     }
   else
