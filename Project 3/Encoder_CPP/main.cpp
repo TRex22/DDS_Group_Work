@@ -3,13 +3,16 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
-#include <stdlib.h>
-#include <string>
+//#include <stdlib.h>
+//#include <string>
 #include <math.h>
 
 #define MAX_UNIQUE_CHARS 256
 #define MAX_LENGTH 255
+#define MAX_CODE_LENGTH 256
 
 using namespace std;
 
@@ -366,7 +369,7 @@ void pq_print_freq(PQueue *p){
   printf("%d\n", p->data[i]->root->frequency);
 }
 
-void Traversal(TreeNode *t, char **enc, string code)
+void Traversal(TreeNode *t, char *enc[MAX_CODE_LENGTH], string code)
 {
   //string code = "t";
   //code = "";
@@ -391,11 +394,12 @@ void Traversal(TreeNode *t, char **enc, string code)
 
   if((t->right == NULL) && (t->left == NULL))
     {
-      //enc[t->character] = (char*)malloc(256*sizeof(char));
+      enc[t->character] = (char*)malloc((code.length()+1)*sizeof(char));
       //cout << code+" char: "<<t->character << endl;
       //cout<<code<<endl;
       //enc[t->character] = new char[256];
-      enc[t->character] = (char*)code.c_str();
+      strcpy(enc[t->character], code.c_str());
+      //*enc[t->character] = code.c_str();
       //cout << enc[t->character] << endl;
       code = "";
     }
@@ -483,7 +487,7 @@ int main()
       //traverseData(FQ);
 
       //run the traversal and get stuff
-      char **enc = (char**)malloc(256*sizeof(char*));
+      char *enc[MAX_CODE_LENGTH];
       string code = "";
       Traversal(t->root, enc, code);
       CodedBits = 0;
@@ -491,7 +495,7 @@ int main()
       for (int j = 0; j< input.length(); j++)
 	{
 	  //cout<<enc[input[j]]<<endl;
-	  encode = encode + enc[input[j]];
+	  encode = encode + *enc[input[j]];
 	  //CodedBits += enc[input[j]].length();
 	}
       cout<<encode<<endl;
