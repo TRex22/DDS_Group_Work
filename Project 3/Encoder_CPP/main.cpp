@@ -399,6 +399,7 @@ void Traversal(TreeNode *t, char *enc[MAX_CODE_LENGTH], string code)
       //cout<<code<<endl;
       //enc[t->character] = new char[256];
       strcpy(enc[t->character], code.c_str());
+      //cout<<"\n"<<"Char: "<<t->character<<" "<<enc[t->character]<<endl;
       //*enc[t->character] = code.c_str();
       //cout << enc[t->character] << endl;
       code = "";
@@ -488,15 +489,34 @@ int main()
 
       //run the traversal and get stuff
       char *enc[MAX_CODE_LENGTH];
+      //waste memory like 4kb!!!
+      for (int k = 0; k < MAX_CODE_LENGTH; k++)
+	{
+	  enc[k] = (char*)malloc(255*sizeof(char));
+	}
+
       string code = "";
       Traversal(t->root, enc, code);
+      
+      //check the char array of encoded stuffs
+      /*
+	cout<<"\n\nHere lies the array:\n"<<endl;
+	for (int k = 0; k < MAX_CODE_LENGTH; k++)
+	{
+	cout<<"At k"<<k<<": "<<" Char: "<<char(k)<<" "<<enc[k]<<endl;
+	}
+	cin ;
+      */
+
       CodedBits = 0;
       string encode = "";
       for (int j = 0; j< input.length(); j++)
 	{
 	  //cout<<enc[input[j]]<<endl;
-	  encode = encode + *enc[input[j]];
-	  //CodedBits += enc[input[j]].length();
+	  //cout<<"\n"<<"Char: "<<input[j]<<" "<<enc[input[j]]<<endl;
+	  //encode = encode + *enc[input[j]];
+	  encode.append(enc[input[j]]);
+    	  //CodedBits += enc[input[j]].length();
 	}
       cout<<encode<<endl;
       //cout<<"\ny: "<<enc['y']<<endl;
