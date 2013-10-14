@@ -369,109 +369,133 @@ void pq_print_freq(PQueue *p){
   printf("%d\n", p->data[i]->root->frequency);
 }
 
-string Traversal(TreeNode *head, TreeNode *t, string encode)
+string Traversal(TreeNode *head, string encode)
 {
   string decode = "";
-  if(!encode.empty())
-    {
-      if((t->right == NULL) && (t->left == NULL))
-	{
-	  //here lies some leaves to clean up
-	  decode += t->character;
-	  t = head;
-	}
+  TreeNode *t = head;
 
-      //0 left
-      if(encode.at(0) == 0)
-	{
-	  //remove the 0
-	  encode.erase(0,0);
-	  decode += Traversal(head, t->left, encode);
-	}
-
-      //1 right
-      else if(encode.at(1) == 1)
-	{
-	  //remove the 1
-	  encode.erase(0,0);
-	  decode += Traversal(head, t->right, encode);
-	}
-      return decode;
+  char c;
+  for(int i = 0; i < encode.length(); i++){
+    c = encode[i];
+    
+    if(c == '0'){
+        t = t->left;
+    }else{
+        t = t->right;
     }
 
+    if(t->left == NULL){
+        decode += t->character;
+        t = head;
+    }
   
+  }
+
+//  if(!encode.empty())
+//    {
+//      if((t->right == NULL) && (t->left == NULL))
+//	{
+//	  //here lies some leaves to clean up
+//	  decode += t->character;
+//	  t = head;
+//	}
+//
+//      //0 left
+//      if(encode.at(0) == 0)
+//	{
+//	  //remove the 0
+//	  encode.erase(0,0);
+//	  decode += Traversal(head, t->left, encode);
+//	}
+//
+//      //1 right
+//      else if(encode.at(1) == 1)
+//	{
+//	  //remove the 1
+//	  encode.erase(0,0);
+//	  decode += Traversal(head, t->right, encode);
+//	}
+//      return decode;
+//    }
+//
+  
+  return decode;
 }
 
 
 int main()
 {
-  //read first two lines
-  string CharSet;
-  string CharCount;
+    //read first two lines
+    string CharSet;
+    string CharCount;
 
-  cin >> CharSet;
-  cin >> CharCount;
+    cin >> CharSet;
+    cin >> CharCount;
 
-  FreqQueue *FQ = new FreqQueue();
+    cout << "CharSet: "  << CharSet << endl;
 
-  if(!CharSet.empty())
+    FreqQueue *FQ = new FreqQueue();
+
+    if(!CharSet.empty())
     {
-      FQ -> character = CharSet.at(0);
-      FQ -> frequency = CharCount.at(0);
-      FQ -> next = NULL;
-      
-      FreqQueue *trav = FQ;
+        FQ -> character = CharSet.at(0);
+        FQ -> frequency = CharCount.at(0);
+        FQ -> next = NULL;
 
-      for(int i = 1; CharSet[i] != '\0'; i++)
-	{
-	  trav = trav -> next;
-	  FreqQueue *node = new FreqQueue();
-	  node -> character = CharSet.at(i);
-	  //probably bad because of double digits ect
-	  //rather use whitespace finding ect...
-	  node -> frequency = CharCount.at(i);
-	  node -> next = NULL;
-	  trav = node;
-	}
+        FreqQueue *trav = FQ;
 
-      PQueue *p = pq_init();
-      Tree *t;
+        for(int i = 1; CharSet[i] != '\0'; i++)
+        {
+            trav = trav -> next;
+            FreqQueue *node = new FreqQueue();
+            node -> character = CharSet.at(i);
+            //probably bad because of double digits ect
+            //rather use whitespace finding ect...
+            node -> frequency = CharCount.at(i);
+            node -> next = NULL;
+            trav = node;
+        }
 
-      trav = FQ;
+        PQueue *p = pq_init();
+        Tree *t;
 
-      while(trav != NULL){
-	t = tree_init(trav->frequency, trav->character);
-	pq_enqueue(p, t, trav->frequency);
-	trav = trav->next;
-      }
+        trav = FQ;
 
-      Tree *s;
+        while(trav != NULL){
+            t = tree_init(trav->frequency, trav->character);
+            pq_enqueue(p, t, trav->frequency);
+            trav = trav->next;
+        }
+        pq_print(p);
 
-      while(p->size > 1){
-	t = pq_dequeue(p);
-	s = pq_dequeue(p);
+        Tree *s;
 
-	t = tree_merge(t, s);
-	pq_enqueue(p, t, t->root->frequency);
-      }
-      //free(s);
-      //free(p);
+        while(p->size > 1){
+            t = pq_dequeue(p);
+            s = pq_dequeue(p);
 
-      t = pq_dequeue(p);
-      
-      //read the encoded text now
-      string encode = "";
-      cin >> encode;
+            t = tree_merge(t, s);
+            pq_enqueue(p, t, t->root->frequency);
+        }
+        //free(s);
+        //free(p);
 
-      //find decode
-      string decode = "";
-      decode = Traversal(t->root, t->root, encode);
+        t = pq_dequeue(p);
 
-      cout << decode;
+        tree_print(t);
+        //read the encoded text now
+        string encode = "";
+        cin >> encode;
+
+        //find decode
+        string decode = "";
+        decode = Traversal(t->root,  encode);
+
+        cout << decode;
 
     }  
 
-  return 0;
+    return 0;
 }
 
 //old code for encoder for reference purposes only
