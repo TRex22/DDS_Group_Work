@@ -373,53 +373,57 @@ string Traversal(TreeNode *head, string encode)
 {
   string decode = "";
   TreeNode *t = head;
-
+  
   char c;
-  for(int i = 0; i < encode.length(); i++){
-    c = encode[i];
-    
-    if(c == '0'){
-        t = t->left;
-    }else{
-        t = t->right;
-    }
+  for(int i = 0; i < encode.length(); i++)
+    {
+      c = encode[i];
 
-    if(t->left == NULL){
-        decode += t->character;
-        t = head;
-    }
-  
-  }
+      if(c == '0')
+	{
+	  t = t->left;
+	}
 
-//  if(!encode.empty())
-//    {
-//      if((t->right == NULL) && (t->left == NULL))
-//	{
-//	  //here lies some leaves to clean up
-//	  decode += t->character;
-//	  t = head;
-//	}
-//
-//      //0 left
-//      if(encode.at(0) == 0)
-//	{
-//	  //remove the 0
-//	  encode.erase(0,0);
-//	  decode += Traversal(head, t->left, encode);
-//	}
-//
-//      //1 right
-//      else if(encode.at(1) == 1)
-//	{
-//	  //remove the 1
-//	  encode.erase(0,0);
-//	  decode += Traversal(head, t->right, encode);
-//	}
-//      return decode;
-//    }
-//
-  
+      else
+	{
+	  t = t->right;
+	} 
+
+      if(t->left == NULL){
+	decode += t->character;
+	t = head;
+      }
+
+    }
   return decode;
+  /*
+    if(!encode.empty())
+    {
+    if((t->right == NULL) && (t->left == NULL))
+    {
+    //here lies some leaves to clean up
+    decode += t->character;
+    t = head;
+    }
+
+    //0 left
+    if(encode.at(0) == 0)
+    {
+    //remove the 0
+    encode.erase(0,0);
+    decode += Traversal(head, t->left, encode);
+    }
+
+    //1 right
+    else if(encode.at(1) == 1)
+    {
+    //remove the 1
+    encode.erase(0,0);
+    decode += Traversal(head, t->right, encode);
+    }
+    return decode;
+    }
+  */
 }
 
 
@@ -429,10 +433,9 @@ int main()
     string CharSet;
     string CharCount;
 
-    cin >> CharSet;
-    cin >> CharCount;
-
-    cout << "CharSet: "  << CharSet << endl;
+    getline(cin, CharSet);
+    getline(cin, CharCount);
+    //cout<<"CharSet: "<<CharSet<<" CharCount: "<<CharCount<<endl;
 
     FreqQueue *FQ = new FreqQueue();
 
@@ -445,16 +448,22 @@ int main()
         FreqQueue *trav = FQ;
 
         for(int i = 1; CharSet[i] != '\0'; i++)
-        {
-            trav = trav -> next;
-            FreqQueue *node = new FreqQueue();
-            node -> character = CharSet.at(i);
-            //probably bad because of double digits ect
-            //rather use whitespace finding ect...
-            node -> frequency = CharCount.at(i);
-            node -> next = NULL;
-            trav = node;
-        }
+	  {
+	    //cout<<"Char Set at i: "<<CharSet[i]<<endl;
+	    if (CharSet[i] != ' ')
+	      {
+		//cout<<"HEHEH"<<endl;
+		//trav = trav -> next;
+		FreqQueue *node = new FreqQueue();
+		node -> character = CharSet.at(i);
+		//probably bad because of double digits ect
+		//rather use whitespace finding ect...
+		node -> frequency = CharCount.at(i);
+		node -> next = NULL;
+		trav->next = node;
+		trav = node;
+	      }
+	  }
 
         PQueue *p = pq_init();
         Tree *t;
@@ -466,7 +475,7 @@ int main()
             pq_enqueue(p, t, trav->frequency);
             trav = trav->next;
         }
-        pq_print(p);
+        //pq_print(p);
 
         Tree *s;
 
@@ -481,142 +490,20 @@ int main()
         //free(p);
 
         t = pq_dequeue(p);
-
-        tree_print(t);
+	
+	//cout<<endl;
+        //tree_print(t);
+	//cout<<endl<<endl;
         //read the encoded text now
         string encode = "";
         cin >> encode;
-
+	
         //find decode
         string decode = "";
-        decode = Traversal(t->root,  encode);
+        decode = Traversal(t->root, encode);
 
         cout << decode;
 
     }  
-
     return 0;
 }
-
-//old code for encoder for reference purposes only
-//from main
-/*
-
-int OriginalBits;
-int CodedBits;
-string input;
-//cin >> input;
-getline(cin, input);
-FreqQueue *FQ = new FreqQueue();//initFreq(input[0]);
-
-//cout << "\n: " << input[1]<<endl;
-
-if (!input.empty())
-  {
-    //i starts at 1;
-    //input[i]
-    FQ -> character = input.at(0);
-    FQ -> frequency = 1;
-    FQ -> next = NULL;
-    //FQ = NULL;
-    OriginalBits = 2; //one for first char and one for \0
-
-    FreqQueue *SQ = FQ;// = new FreqQueue();
-    for(int i = 1; input[i] != '\0'; i++)
-      //for(int i = 1; i != input.end(); i++)
-      {
-	//cout<<input[i]<<endl;
-	SQ = SearchQueue(FQ, input.at(i));
-	if(input.at(i) != '\0')
-	  {
-	    if(SQ != NULL)
-	      {
-		//increase frequency
-		SQ -> frequency ++;
-	      }
-	    else
-	      {
-		enqueue (FQ, input[i]);
-	      }
-	  }
-	OriginalBits ++;
-      }
-    //figure out original bits
-    OriginalBits *= 8;
-    //cout << "\nOriginal bits: "<<OriginalBits<<endl;
-    //now sort the frequency queue
-
-    //run a check
-    //traverseData(FQ);
-
-    PQueue *p = pq_init();
-    Tree *t;
-
-    FreqQueue *trav = FQ;
-
-    while(trav != NULL){
-      t = tree_init(trav->frequency, trav->character);
-      pq_enqueue(p, t, trav->frequency);
-      trav = trav->next;
-    }
-    pq_print_chars(p);
-    pq_print_freq(p);
-
-    Tree *s;
-
-    while(p->size > 1){
-      t = pq_dequeue(p);
-      s = pq_dequeue(p);
-
-      t = tree_merge(t, s);
-      pq_enqueue(p, t, t->root->frequency);
-    }
-
-    t = pq_dequeue(p);
-    //tree_print(t);
-	
-    //minSort(FQ);
-
-    ////run a check
-    //traverseData(FQ);
-
-    //run the traversal and get stuff
-    char *enc[MAX_CODE_LENGTH];
-    //waste memory like 4kb!!!
-    for (int k = 0; k < MAX_CODE_LENGTH; k++)
-      {
-	enc[k] = (char*)malloc(255*sizeof(char));
-      }
-
-    string code = "";
-    Traversal(t->root, enc, code);
-      
-    //check the char array of encoded stuffs
-
-    cout<<"\n\nHere lies the array:\n"<<endl;
-    for (int k = 0; k < MAX_CODE_LENGTH; k++)
-      {
-	cout<<"At k"<<k<<": "<<" Char: "<<char(k)<<" "<<enc[k]<<endl;
-      }
-    cin ;
-
-
-    CodedBits = 0;
-    string encode = "";
-    for (int j = 0; j< input.length(); j++)
-      {
-	//cout<<enc[input[j]]<<endl;
-	//cout<<"\n"<<"Char: "<<input[j]<<" "<<enc[input[j]]<<endl;
-	//encode = encode + *enc[input[j]];
-	encode.append(enc[input[j]]);
-	//CodedBits += enc[input[j]].length();
-      }
-    cout<<encode<<endl;
-    //cout<<"\ny: "<<enc['y']<<endl;
-    CodedBits = encode.length();
-    //cout<<endl;
-    //cout << "\nb: " << enc['b']<<endl;
-	
-    cout << "Total Bits (Original):" <<OriginalBits<<endl;
-    cout << "Total Bits (Coded):"<<CodedBits <<endl;
-*/
