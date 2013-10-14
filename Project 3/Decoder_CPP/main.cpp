@@ -369,8 +369,9 @@ void pq_print_freq(PQueue *p){
   printf("%d\n", p->data[i]->root->frequency);
 }
 
-string Traversal(TreeNode *head, TreeNode *t, string encode, string decode)
+string Traversal(TreeNode *head, TreeNode *t, string encode)
 {
+  string decode = "";
   if(!encode.empty())
     {
       if((t->right == NULL) && (t->left == NULL))
@@ -385,7 +386,7 @@ string Traversal(TreeNode *head, TreeNode *t, string encode, string decode)
 	{
 	  //remove the 0
 	  encode.erase(0,0);
-	  Traversal(head, t->left, encode, decode);
+	  decode += Traversal(head, t->left, encode);
 	}
 
       //1 right
@@ -393,7 +394,7 @@ string Traversal(TreeNode *head, TreeNode *t, string encode, string decode)
 	{
 	  //remove the 1
 	  encode.erase(0,0);
-	  Traversal(head, t->right, encode, decode);
+	  decode += Traversal(head, t->right, encode);
 	}
       return decode;
     }
@@ -459,12 +460,12 @@ int main()
       t = pq_dequeue(p);
       
       //read the encoded text now
-      string encode;
+      string encode = "";
       cin >> encode;
 
       //find decode
       string decode = "";
-      decode = Traversal(t->root, t->root, encode, decode);
+      decode = Traversal(t->root, t->root, encode);
 
       cout << decode;
 
