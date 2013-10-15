@@ -369,118 +369,105 @@ void pq_print_freq(PQueue *p){
   printf("%d\n", p->data[i]->root->frequency);
 }
 
-string Traversal(TreeNode *head, string encode)
+void Traversal(TreeNode *t, char *enc[MAX_CODE_LENGTH], string code)
 {
-  string decode = "";
-  TreeNode *t = head;
-  
-  char c;
-  for(int i = 0; i < encode.length(); i++)
+  //string code = "t";
+  //code = "";
+
+  if (t->left !=NULL)
     {
-      c = encode[i];
-
-      if(c == '0')
-	{
-	  t = t->left;
-	}
-
-      else
-	{
-	  t = t->right;
-	} 
-
-      if(t->left == NULL){
-	decode += t->character;
-	t = head;
-      }
-
-    }
-  return decode;
-  /*
-    if(!encode.empty())
-    {
-    if((t->right == NULL) && (t->left == NULL))
-    {
-    //here lies some leaves to clean up
-    decode += t->character;
-    t = head;
+      code = code+'0';
+      Traversal(t->left, enc, code);
+      //cout<<"\nLeft: "+code<<endl;
     }
 
-    //0 left
-    if(encode.at(0) == 0)
+  if (t->right != NULL) 
     {
-    //remove the 0
-    encode.erase(0,0);
-    decode += Traversal(head, t->left, encode);
+      //cout<< "Code before: "<<code<<endl;
+      code.erase(code.end()-1,code.end());
+      //always go back one when going right so delete 1 left 
+      //cout<< "Code after: "<<code<<endl;
+      code = code+'1';
+      Traversal(t->right, enc, code);
+      //cout<<"\nRight: "+code<<endl;
     }
 
-    //1 right
-    else if(encode.at(1) == 1)
+  if((t->right == NULL) && (t->left == NULL))
     {
-    //remove the 1
-    encode.erase(0,0);
-    decode += Traversal(head, t->right, encode);
+      enc[t->character] = (char*)malloc((code.length()+1)*sizeof(char));
+      //cout << code+" char: "<<t->character << endl;
+      //cout<<code<<endl;
+      //enc[t->character] = new char[256];
+      strcpy(enc[t->character], code.c_str());
+      //cout<<"\n"<<"Char: "<<t->character<<" "<<enc[t->character]<<endl;
+      //*enc[t->character] = code.c_str();
+      //cout << enc[t->character] << endl;
+      code = "";
     }
-    return decode;
-    }
-  */
 }
-
 
 int main()
 {
-    //read first two lines
-    string CharSet;
-    string CharCount;
+  //get input
+  int OriginalBits;
+  int CodedBits;
+  string input;
+  //cin >> input;
+  getline(cin, input);
+  FreqQueue *FQ = new FreqQueue();//initFreq(input[0]);
 
-    getline(cin, CharSet);
-    getline(cin, CharCount);
+  //cout << "\n: " << input[1]<<endl;
 
-    FreqQueue *FQ = new FreqQueue();
-
-    if(!CharSet.empty())
+  if (!input.empty())
     {
-      //FQ -> character = CharSet.at(0);
-      //FQ -> frequency = CharCount.at(0);
-      //FQ -> next = NULL;
+      //i starts at 1;
+      //input[i]
+      FQ -> character = input.at(0);
+      FQ -> frequency = 1;
+      FQ -> next = NULL;
+      //FQ = NULL;
+      OriginalBits = 2; //one for first char and one for \0
 
-      FreqQueue *trav = FQ;
-	
-      trav -> character = CharSet.at(0);
-      trav -> frequency = CharCount.at(0);
-      trav -> next = NULL;
-	
-      for(int i = 0; CharSet[i] != '\0'; i++)
-	{
-	  //cout<<"Char Set at i: "<<CharSet[i]<<endl;
-	  if (CharSet[i] != ' ')
-	    {
-	      cout<<"CharSet at i: "<<CharSet[i]<<endl;
-	      //probably bad because of double digits ect
-	      //rather use whitespace finding ect...
+      FreqQueue *SQ = FQ;// = new FreqQueue();
+      for(int i = 1; input[i] != '\0'; i++)
+	//for(int i = 1; i != input.end(); i++)
+        {
+	  //cout<<input[i]<<endl;
+	  SQ = SearchQueue(FQ, input.at(i));
+	  if(input.at(i) != '\0')
+            {
+	      if(SQ != NULL)
+                {
+		  //increase frequency
+		  SQ -> frequency ++;
+                }
+	      else
+                {
+		  enqueue (FQ, input[i]);
+                }
+            }
+	  OriginalBits ++;
+        }
+      //figure out original bits
+      OriginalBits *= 8;
+      //cout << "\nOriginal bits: "<<OriginalBits<<endl;
+      //now sort the frequency queue
 
-	      //trav = trav -> next;
-	      trav->next = new FreqQueue();
-
-	      trav->next -> character = CharSet.at(i);
-	      trav->next -> frequency = CharCount.at(i)-'0';
-	      trav->next -> next = NULL;
-
-	      trav = trav->next;
-	    }
-	}
+      //run a check
+      //traverseData(FQ);
 
       PQueue *p = pq_init();
       Tree *t;
 
-      trav = FQ;
+      FreqQueue *trav = FQ;
 
       while(trav != NULL){
 	t = tree_init(trav->frequency, trav->character);
 	pq_enqueue(p, t, trav->frequency);
 	trav = trav->next;
       }
-      //pq_print(p);
+      pq_print_chars(p);
+      pq_print_freq(p);
 
       Tree *s;
 
@@ -489,26 +476,61 @@ int main()
 	s = pq_dequeue(p);
 
 	t = tree_merge(t, s);
-            pq_enqueue(p, t, t->root->frequency);
-        }
-        //free(s);
-        //free(p);
+	pq_enqueue(p, t, t->root->frequency);
+      }
 
-        t = pq_dequeue(p);
+      t = pq_dequeue(p);
+      //tree_print(t);
 	
-	//cout<<endl;
-        tree_print(t);
-	//cout<<endl<<endl;
-        //read the encoded text now
-        string encode = "";
-        cin >> encode;
+      //minSort(FQ);
+
+      ////run a check
+      //traverseData(FQ);
+
+      //run the traversal and get stuff
+      char *enc[MAX_CODE_LENGTH];
+      //waste memory like 4kb!!!
+      for (int k = 0; k < MAX_CODE_LENGTH; k++)
+	{
+	  enc[k] = (char*)malloc(255*sizeof(char));
+	}
+
+      string code = "";
+      Traversal(t->root, enc, code);
+      
+      //check the char array of encoded stuffs
+      /*
+	cout<<"\n\nHere lies the array:\n"<<endl;
+	for (int k = 0; k < MAX_CODE_LENGTH; k++)
+	{
+	cout<<"At k"<<k<<": "<<" Char: "<<char(k)<<" "<<enc[k]<<endl;
+	}
+	cin ;
+      */
+
+      CodedBits = 0;
+      string encode = "";
+      for (int j = 0; j< input.length(); j++)
+	{
+	  //cout<<enc[input[j]]<<endl;
+	  //cout<<"\n"<<"Char: "<<input[j]<<" "<<enc[input[j]]<<endl;
+	  //encode = encode + *enc[input[j]];
+	  encode.append(enc[input[j]]);
+    	  //CodedBits += enc[input[j]].length();
+	}
+      cout<<encode<<endl;
+      //cout<<"\ny: "<<enc['y']<<endl;
+      CodedBits = encode.length();
+      //cout<<endl;
+      //cout << "\nb: " << enc['b']<<endl;
 	
-        //find decode
-        string decode = "";
-        decode = Traversal(t->root, encode);
+      cout << "Total Bits (Original):" <<OriginalBits<<endl;
+      cout << "Total Bits (Coded):"<<CodedBits <<endl;
+    }
+  else
+    {
+      //cheerz
+    }
 
-        cout << decode;
-
-    }  
-    return 0;
+  return 0;
 }

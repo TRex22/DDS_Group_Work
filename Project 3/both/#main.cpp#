@@ -455,7 +455,7 @@ int main()
 	  //cout<<"Char Set at i: "<<CharSet[i]<<endl;
 	  if (CharSet[i] != ' ')
 	    {
-	      cout<<"CharSet at i: "<<CharSet[i]<<endl;
+	      //cout<<"CharSet at i: "<<CharSet[i]<<endl;
 	      //probably bad because of double digits ect
 	      //rather use whitespace finding ect...
 
