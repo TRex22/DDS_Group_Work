@@ -14,7 +14,7 @@ Licence (unless otherwise specified)
               in Your Modified Code if You change the
               Code.
 
- Copyright (C) 2012 Jason Max Chalom, and Ariel Rosenfeld
+ Copyright (C) 2013 Jason Max Chalom, and Ariel Rosenfeld
 
  Everyone is permitted to copy and distribute verbatim or modified 
  copies of this license document, and changing it is allowed as long 
